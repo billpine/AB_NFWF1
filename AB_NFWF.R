@@ -31,9 +31,14 @@ max(d1$LiveSpat)
 min(d1$LiveSpat)
 
 #remove -999 in live spat rows
-d2 <- d1[d1$LiveSpat > -1,]
-d2 <- d2[d2$TotalWt > -1,]
+#d2 <- d1[d1$LiveSpat > -1,]
+#d2 <- d2[d2$TotalWt > -1,]
 
+#switch -999 to NA instead of removing
+d2 <- d1
+d2$LiveSpat[d2$LiveSpat < -1] <- NA
+d2$TotalWt[d2$TotalWt < -1] <- NA
+d2$Drills[d2$Drills < -1] <- NA
 
 str(d2)
 
@@ -281,6 +286,10 @@ d5=merge(count_live,count_quads,by=c("StationName","StationNumber","Cultch","Per
 
 names(d5)
 
+#now add drills to dataset - took the mean - does that make sense or should it be sum?
+count_drills = aggregate(Drills~StationName+StationNumber+Cultch+Period+season,data=d3,mean)
+d5 = merge(d5, count_drills, by=c("StationName", "StationNumber", "Cultch", "Period", "season"), all.x=TRUE)
+
 #summary table thinking about dispersion
 #by station and cultch density
 summarise_live<-d5%>%
@@ -312,9 +321,18 @@ m4 <- glm.nb(LiveSpat ~ Cultch + offset(log(Num_quads)), data = d5)
 m5 <- glm.nb(LiveSpat ~ Cultch + Period + offset(log(Num_quads)), data = d5) 
 m6 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + offset(log(Num_quads)), data = d5) 
 m7 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + offset(log(Num_quads)), data = d5) 
+m8 <- glm.nb(LiveSpat ~ Drills + offset(log(Num_quads)), data = d5)
+m9 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + Drills + offset(log(Num_quads)), data = d5) 
+#model with drills (m9) is quite a bit better then m7 (delta AIC of 830)
 
-cand.set = list(m1,m2,m3,m4,m5,m6,m7)
-modnames = c("period", "period + station", "period * station", "cultch", "cultch + period", "cultch+period+station", "cultch+period+station+season")
+#try a model without period 2 just to see
+temp <- subset(d5, d5$Period > 2)
+m_temp <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + offset(log(Num_quads)), data = temp)
+summary(m_temp)
+#very little difference, guess it doesn't really matter - prob b/c just period 2 is crazy number all the rest are low
+
+cand.set = list(m1,m2,m3,m4,m5,m6,m7,m8,m9)
+modnames = c("period", "period + station", "period * station", "cultch", "cultch + period", "cultch+period+station", "cultch+period+station+season", "drills", "cultch+period+station+season+drills")
 aictab(cand.set, modnames, second.ord = FALSE) #model selection table with AIC
 
 summary(m7)
@@ -707,13 +725,13 @@ names(sum_wt)[6]<-c("Sum_weight")
 #but offset not applied to weights
 
 mean_wt=aggregate(TotalWt~StationName+StationNumber+Cultch+Period+season,data=d3,mean)
-names(mean_wt)[6]<-c("Mean_weight")
+#names(mean_wt)[7]<-c("Mean_weight")
 
 #merge live & tran_length total data frame
 d6=merge(d5,sum_wt, by=c("StationName","StationNumber","Cultch","Period", "season"))
 d7=merge(d5,mean_wt, by=c("StationName","StationNumber","Cultch","Period", "season"))
 
-as.integer(d7$TotalWt)
+as.integer(d7$Mean_weight)
 
 #fit basic NB GLM
 m1.1 <- glm.nb(LiveSpat ~ Period + offset(log(Num_quads)), data = d7) 
