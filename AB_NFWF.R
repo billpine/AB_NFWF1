@@ -32,6 +32,8 @@ min(d1$LiveSpat)
 
 #remove -999 in live spat rows
 d2 <- d1[d1$LiveSpat > -1,]
+d2 <- d2[d2$TotalWt > -1,]
+
 
 str(d2)
 
@@ -303,7 +305,7 @@ str(d5)
 d5$StationName <- as.factor(d5$StationName)
 d5$season <- as.factor(d5$season)
 #fit basic NB GLM
-m1 <- glm.nb(LiveSpat ~ as.factor(Period) + offset(log(Num_quads)), data = d5) 
+m1 <- glm.nb(LiveSpat ~ Period + offset(log(Num_quads)), data = d5) 
 m2 <- glm.nb(LiveSpat ~ Period + StationName + offset(log(Num_quads)), data = d5) 
 m3 <- glm.nb(LiveSpat ~ Period * StationName + offset(log(Num_quads)), data = d5) 
 m4 <- glm.nb(LiveSpat ~ Cultch + offset(log(Num_quads)), data = d5) 
@@ -312,7 +314,7 @@ m6 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + offset(log(Num_quads)), 
 m7 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + offset(log(Num_quads)), data = d5) 
 
 cand.set = list(m1,m2,m3,m4,m5,m6,m7)
-modnames = c("year", "year + station", "year * station", "cultch", "cultch + year", "cultch+year+station", "cultch+period+station+season")
+modnames = c("period", "period + station", "period * station", "cultch", "cultch + period", "cultch+period+station", "cultch+period+station+season")
 aictab(cand.set, modnames, second.ord = FALSE) #model selection table with AIC
 
 summary(m7)
@@ -695,20 +697,32 @@ title("NFWF Hotel Bar")
 
 #now sum TotalWt and include that
 
+
 sum_wt=aggregate(TotalWt~StationName+StationNumber+Cultch+Period+season,data=d3,sum)
+names(sum_wt)[6]<-c("Sum_weight")
+
+
+
+#or use the mean b/c the offset is applied to the counts, so that's why we use sum
+#but offset not applied to weights
+
+mean_wt=aggregate(TotalWt~StationName+StationNumber+Cultch+Period+season,data=d3,mean)
+names(mean_wt)[6]<-c("Mean_weight")
 
 #merge live & tran_length total data frame
-d5=merge(d5,sum_wt,by=c("StationName","StationNumber","Cultch","Period", "season"))
-as.integer(d5$TotalWt)
+d6=merge(d5,sum_wt, by=c("StationName","StationNumber","Cultch","Period", "season"))
+d7=merge(d5,mean_wt, by=c("StationName","StationNumber","Cultch","Period", "season"))
+
+as.integer(d7$TotalWt)
 
 #fit basic NB GLM
-m1.1 <- glm.nb(LiveSpat ~ as.factor(Period) + offset(log(Num_quads)), data = d5) 
-m2.1 <- glm.nb(LiveSpat ~ Period + StationName + offset(log(Num_quads)), data = d5) 
-m3.1 <- glm.nb(LiveSpat ~ Period * StationName + offset(log(Num_quads)), data = d5) 
-m4.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + offset(log(Num_quads)), data = d5) 
-m5.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + Period + offset(log(Num_quads)), data = d5) 
-m6.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + Period + StationName + offset(log(Num_quads)), data = d5) 
-m7.1 <- glm.nb(LiveSpat ~ Cultch + TotalWt + Period + StationName + season + offset(log(Num_quads)), data = d5) 
+m1.1 <- glm.nb(LiveSpat ~ Period + offset(log(Num_quads)), data = d7) 
+m2.1 <- glm.nb(LiveSpat ~ Period + StationName + offset(log(Num_quads)), data = d7) 
+m3.1 <- glm.nb(LiveSpat ~ Period * StationName + offset(log(Num_quads)), data = d7) 
+m4.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + offset(log(Num_quads)), data = d7) 
+m5.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + Period + offset(log(Num_quads)), data = d7) 
+m6.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + Period + StationName + offset(log(Num_quads)), data = d7) 
+m7.1 <- glm.nb(LiveSpat ~ Cultch + TotalWt + Period + StationName + season + offset(log(Num_quads)), data = d7) 
 
 
 cand.set = list(m1.1,m2.1,m3.1,m5.1,m6.1,m7.1)
