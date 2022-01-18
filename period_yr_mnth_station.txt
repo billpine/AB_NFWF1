@@ -1,7 +1,7 @@
 "Period","Year","Month","Station Name","Number Quadrats"
 2,2015,10,"NFWF Bulkhead",75
 2,2015,10,"NFWF Dry Bar",74
-2,2015,10,"NFWF Hotel Bar",74
+2,2015,10,"NFWF Hotel Bar",73
 2,2016,1,"NFWF Bulkhead",75
 2,2016,2,"NFWF Dry Bar",75
 2,2016,2,"NFWF Hotel Bar",75
