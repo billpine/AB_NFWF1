@@ -705,12 +705,15 @@ as.integer(d5$TotalWt)
 m1.1 <- glm.nb(LiveSpat ~ as.factor(Period) + offset(log(Num_quads)), data = d5) 
 m2.1 <- glm.nb(LiveSpat ~ Period + StationName + offset(log(Num_quads)), data = d5) 
 m3.1 <- glm.nb(LiveSpat ~ Period * StationName + offset(log(Num_quads)), data = d5) 
-m4.1 <- glm.nb(LiveSpat ~ TotalWt + offset(log(Num_quads)), data = d5) 
-m5.1 <- glm.nb(LiveSpat ~ TotalWt + Period + offset(log(Num_quads)), data = d5) 
-m6.1 <- glm.nb(LiveSpat ~ TotalWt + Period + StationName + offset(log(Num_quads)), data = d5) 
-m7.1 <- glm.nb(LiveSpat ~ TotalWt + Period + StationName + season + offset(log(Num_quads)), data = d5) 
+m4.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + offset(log(Num_quads)), data = d5) 
+m5.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + Period + offset(log(Num_quads)), data = d5) 
+m6.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + Period + StationName + offset(log(Num_quads)), data = d5) 
+m7.1 <- glm.nb(LiveSpat ~ Cultch + TotalWt + Period + StationName + season + offset(log(Num_quads)), data = d5) 
 
-cand.set = list(m1.1,m2.1,m3.1,m4.1,m5.1,m6.1,m7.1)
-modnames = c("year", "year + station", "year * station", "Totalwt", "TotalWt + year", "Totalwt+year+station", "Totalwt+period+station+season")
+
+cand.set = list(m1.1,m2.1,m3.1,m5.1,m6.1,m7.1)
+modnames = c("year", "year + station", "year * station", "Cultch + TotalWt + year","Cultch + TotalWt + year+ Station", "Cultch + TotalWt + year+ Station+season")
 aictab(cand.set, modnames, second.ord = FALSE) #model selection table with AIC
+
+summary(m7.1)
 
