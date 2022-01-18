@@ -1,0 +1,51 @@
+"Year","Month","Station Name","Number Quadrats"
+2015,10,"NFWF Bulkhead",75
+2015,10,"NFWF Dry Bar",74
+2015,10,"NFWF Hotel Bar",74
+2016,1,"NFWF Bulkhead",75
+2016,2,"NFWF Dry Bar",75
+2016,2,"NFWF Hotel Bar",75
+2016,4,"NFWF Bulkhead",75
+2016,5,"NFWF Dry Bar",75
+2016,5,"NFWF Hotel Bar",75
+2016,7,"NFWF Bulkhead",75
+2016,7,"NFWF Dry Bar",75
+2016,8,"NFWF Hotel Bar",75
+2016,10,"NFWF Bulkhead",75
+2016,10,"NFWF Dry Bar",75
+2016,10,"NFWF Hotel Bar",75
+2017,1,"NFWF Bulkhead",74
+2017,1,"NFWF Dry Bar",75
+2017,1,"NFWF Hotel Bar",74
+2017,2,"NFWF Bulkhead",1
+2017,2,"NFWF Hotel Bar",1
+2017,4,"NFWF Bulkhead",75
+2017,4,"NFWF Dry Bar",75
+2017,4,"NFWF Hotel Bar",75
+2017,7,"NFWF Bulkhead",75
+2017,7,"NFWF Hotel Bar",75
+2017,8,"NFWF Dry Bar",75
+2017,10,"NFWF Bulkhead",75
+2017,10,"NFWF Hotel Bar",75
+2017,11,"NFWF Dry Bar",75
+2018,1,"NFWF Bulkhead",75
+2018,2,"NFWF Dry Bar",75
+2018,2,"NFWF Hotel Bar",75
+2018,4,"NFWF Dry Bar",75
+2018,4,"NFWF Hotel Bar",75
+2018,5,"NFWF Bulkhead",75
+2018,7,"NFWF Bulkhead",75
+2018,7,"NFWF Hotel Bar",75
+2018,8,"NFWF Dry Bar",75
+2018,11,"NFWF Dry Bar",75
+2018,11,"NFWF Hotel Bar",75
+2018,12,"NFWF Bulkhead",75
+2019,1,"NFWF Bulkhead",75
+2019,1,"NFWF Dry Bar",75
+2019,1,"NFWF Hotel Bar",75
+2019,4,"NFWF Dry Bar",75
+2019,4,"NFWF Hotel Bar",75
+2019,5,"NFWF Bulkhead",75
+2019,8,"NFWF Hotel Bar",75
+2019,9,"NFWF Bulkhead",75
+2019,9,"NFWF Dry Bar",75

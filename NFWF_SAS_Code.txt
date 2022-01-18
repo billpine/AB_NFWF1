@@ -1,0 +1,577 @@
+/*NFWF SURVEY*/
+/*Imports the Density, Shell Height, and Subsample data sets*/
+PROC Import datafile="\\FWC-SPFS1\FishBio\Molluscs\Oysters\NFWF\Data\SAS Data\NFWFSurveySAS.xlsx"
+	Out=VolWtCount REPLACE DBMS=XLSX;
+	SHEET="VolWtCount";
+PROC Import datafile="\\FWC-SPFS1\FishBio\Molluscs\Oysters\NFWF\Data\SAS Data\NFWFSurveySAS.xlsx"
+	Out=SH REPLACE DBMS=XLSX;
+	SHEET="SH";
+PROC Import datafile="\\FWC-SPFS1\FishBio\Molluscs\Oysters\NFWF\Data\SAS Data\NFWFSurveySAS.xlsx"
+	Out=Subsample REPLACE DBMS=XLSX;
+	SHEET="Subsample";
+QUIT;
+PROC Import datafile="\\FWC-SPFS1\FishBio\Molluscs\Oysters\NFWF\Data\SAS Data\NFWFSurveySAS.xlsx"
+	Out=Subsample REPLACE DBMS=XLSX;
+	SHEET="Subsample";
+QUIT;
+PROC Import datafile="\\FWC-SPFS1\FishBio\Molluscs\Oysters\NFWF\Data\SAS Data\NFWFWaterQualitySAS.xlsx"
+	Out=WQ REPLACE DBMS=XLSX;
+	SHEET="WQ";
+QUIT;
+/*Changing negative numbers to missing data designation (.) for SAS*/
+DATA VolWtCount1;
+	Set VolWtCount;
+	If TotalVol=-999 then TotalVol=.;
+	If TotalWt=-999 then TotalWt=.;
+	If PartialSubVol=-999 then PartialSubVol=.;
+	If PartialSubWt=-999 then PartialSubWt=.;
+	If TotalSubstrateVol=-999 then TotalSubstrateVol=.;
+	If TotalSubstrateWt=-999 then TotalSubstrateWt=.;
+	If DeadSubOysters=-999 then DeadSubOysters=.;
+	If BiotaVol=-999 then BiotaVol=.;
+	If BiotaWt=-999 then BiotaWt=.;
+	If LiveVol=-999 then LiveVol=.;
+	If LiveWt=-999 then LiveWt=.;
+	If LiveOysters=-999 then LiveOysters=.;
+	If DeadOysters=-999 then DeadOysters=.;
+	If SpatSubstrateVol=-999 then SpatSubstrateVol=.;
+	If SpatSubstrateWt=-999 then SpatSubstrateWt=.;
+	If LiveSpat=-999 then LiveSpat=.;
+	If Deadspat=-999 then DeadSpat=.;
+RUN;
+DATA SH1;
+	Set SH;
+	If SH=-999 then SH=.;
+RUN;
+DATA Subsample1a;
+	Set Subsample;
+	If SH=-999 then SH=.;
+	If Wtg=-999 then Wtg=.;
+	If Vol=-999 then Vol=.;
+	RETAIN Wtkg;
+	Wt=Wtg/1000;
+RUN;
+DATA Subsample1;
+	Set Subsample1a (Keep=Survey Date Site Spat SH Vol Wt);
+RUN;
+DATA WQ1;
+	Set WQ;
+	If Temp=-999 then Temp=.;
+	If Salinity=-999 then Salinity=.;
+	If DO=-999 then DO=.;
+	If pH=-999 then pH=.;
+	If Depth=-999 then Depth=.;
+	If Secchi=-999 then Secchi=.;
+	If Turbidity=-999 then Turbidity=.;
+	If DOPct=-999 then DOPct=.;
+RUN;
+
+
+
+
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*Calculating TotalSubstrateWt and TotalSubstrateVol**************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*Estimating weight of SpatSub oysters from measured SHs using regression equation*/
+DATA SH2;
+	Set SH1;
+	If Group='SpatSub';
+	RETAIN OyCalcWt;
+	If SH>0 then OyCalcWt=0.0000005*(SH**2.6303);
+		Else OyCalcWt=0;
+RUN;
+PROC Sort Data=SH2;
+	By Survey Site Station Quadrat;
+QUIT;
+/*Summing OyCalcWt by quadrat*/
+PROC Tabulate Data=SH2 Out=SumOyCalcWt;
+	Class Survey Site Station Quadrat;
+	Var OyCalcWt;
+	Table Survey, Station*Quadrat, Site*(OyCalcWt*(Sum));
+	Title 'Sum of OyCalcWt calculated from SpatSub SHs';
+QUIT;
+/*Adding summed calculated oyster weights to VolWtCount data set*/
+PROC Sort Data=VolWtCount1;
+	By Site Survey Station Quadrat;
+PROC Sort Data=SumOyCalcWt;
+	By Site Survey Station Quadrat;
+QUIT;
+DATA VolWtCount2;
+	Merge VolWtCount1 SumOyCalcWt (Keep=Survey Site Station Quadrat OyCalcWt_Sum);
+	By Site Survey Station Quadrat;
+	If OyCalcWt_Sum=. then OyCalcWt_Sum=0;
+RUN;
+/*Calculating SumOyCalcWt for the quadrat from number of LiveSpat*/
+DATA VolWtCount3;
+	Set VolWtCount2;
+	*RETAIN WtCheck;
+	*If OyCalcWt_Sum>SpatSubstrateWt then WtCheck='BAD';
+		*Else WtCheck='OK';
+	If OyCalcWt_Sum>SpatSubstrateWt then OyCalcWt_Sum=.;
+RUN;
+DATA VolWtCount4;
+	Set VolWtCount3;
+	RETAIN SumOyCalcWt;
+	If OyCalcWt_Sum=. then SumOyCalcWt=.;
+		Else If LiveSpat=. then SumOyCalcWt=.;
+		Else If LiveSpat=0 then SumOyCalcWt=0;
+		Else If LiveSpat>0 and LiveSpat<=50 then SumOyCalcWt=OyCalcWt_Sum;
+		Else SumOyCalcWt=(LiveSpat/50)*OyCalcWt_Sum;
+RUN;
+/*Calculating SumOyCalcVol (total quadrat SpatSub volume) from SumOyCalcWt*/
+DATA VolWtCount5;
+	Set VolWtCount4;
+	RETAIN SumOyCalcVol;
+	SumOyCalcVol=(0.6266*SumOyCalcWt)-0.0119;
+RUN;
+DATA VolWtCount6;
+	Set VolWtCount5;
+	If SumOyCalcVol=. then SumOyCalcVol=.;
+		Else If SumOyCalcVol<0 then SumOyCalcVol=0;
+		Else SumOyCalcVol=SumOyCalcVol;
+RUN;
+/*****************************************************************************************************************************************************/
+/*OPTION 1***************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*Calculating TotalSubstrateWt and TotalSubstrateVol*/
+DATA VolWtCount7;
+	Set VolWtCount6;
+	If TotalSubstrateWt=. then TotalSubstrateWt=(SpatSubstrateWt-SumOyCalcWt)+PartialSubWt;
+		Else TotalSubstrateWt=TotalSubstrateWt;
+	If TotalSubstrateVol=. then TotalSubstrateVol=(SpatSubstrateVol-SumOyCalcVol)+PartialSubVol;
+		Else TotalSubstrateVol=TotalSubstrateVol;
+RUN;
+/*****************************************************************************************************************************************************/
+/*OPTION 2***************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*Calculating TotalSubstrateWt and TotalSubstrateVol*/
+DATA VolWtCount7a;
+	Set VolWtCount6;
+	RETAIN TotalSubstrateWtA TotalSubstrateVolA;
+	TotalSubstrateWtA=TotalWt-(LiveWt+SumOyCalcWt);
+	TotalSubstrateVolA=TotalVol-(LiveVol+SumOyCalcVol);
+RUN;
+/*****************************************************************************************************************************************************/
+/*CALCULATING ERROR by comparing MEASURED LiveWt/Vol with CALCULATED LiveWt/Vol***************************************************************************************/
+/*****************************************************************************************************************************************************/
+DATA SH2b;
+	Set SH1;
+	If Group='OysterSpat';
+	RETAIN OySpatCalcWt;
+	If SH>0 then OySpatCalcWt=0.0000005*(SH**2.6303);
+		Else OySpatCalcWt=0;
+RUN;
+PROC Sort Data=SH2b;
+	By Survey Site Station Quadrat;
+QUIT;
+/*Summing OySpatCalcWt by quadrat*/
+PROC Tabulate Data=SH2b Out=SumOySpatCalcWt;
+	Class Survey Site Station Quadrat;
+	Var OySpatCalcWt;
+	Table Survey, Station*Quadrat, Site*(OySpatCalcWt*(Sum));
+	Title 'Sum of OySpatCalcWt calculated from OysterSpat SHs';
+QUIT;
+/*Adding summed calculated oyster weights to VolWtCount data set*/
+PROC Sort Data=VolWtCount1;
+	By Site Survey Station Quadrat;
+PROC Sort Data=SumOySpatCalcWt;
+	By Site Survey Station Quadrat;
+QUIT;
+DATA VolWtCount2b;
+	Merge VolWtCount1 SumOySpatCalcWt (Keep=Survey Site Station Quadrat OySpatCalcWt_Sum);
+	By Site Survey Station Quadrat;
+	If OySpatCalcWt_Sum=. then OySpatCalcWt_Sum=0;
+RUN;
+/*Calculating SumOySpatCalcWt for the quadrat from number of LiveOysters*/
+DATA VolWtCount3b;
+	Set VolWtCount2b;
+	RETAIN WtCheck;
+	If OySpatCalcWt_Sum>LiveWt then WtCheck='BAD';
+		Else WtCheck='OK';
+	If OySpatCalcWt_Sum>LiveWt then OySpatCalcWt_Sum=.;
+RUN;
+DATA VolWtCount4b;
+	Set VolWtCount3b;
+	RETAIN SumOySpatCalcWt;
+	If OySpatCalcWt_Sum=. then SumOySpatCalcWt=.;
+		Else If LiveOysters=. then SumOySpatCalcWt=.;
+		Else If LiveOysters=0 then SumOySpatCalcWt=0;
+		Else If LiveOysters>0 and LiveOysters<=50 then SumOySpatCalcWt=OySpatCalcWt_Sum;
+		Else SumOySpatCalcWt=(LiveOysters/50)*OySpatCalcWt_Sum;
+RUN;
+/*Calculating SumOySpatCalcVol (total quadrat LiveOyster volume) from SumOySpatCalcWt*/
+DATA VolWtCount5b;
+	Set VolWtCount4b;
+	RETAIN SumOySpatCalcVol;
+	SumOySpatCalcVol=(0.6266*SumOySpatCalcWt)-0.0119;
+RUN;
+DATA VolWtCount6b;
+	Set VolWtCount5b;
+	If SumOySpatCalcVol=. then SumOySpatCalcVol=.;
+		Else If SumOySpatCalcVol<0 then SumOySpatCalcVol=0;
+		Else SumOySpatCalcVol=SumOySpatCalcVol;
+RUN;
+
+
+
+
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*Calculating TotalLive and TotalDead oysters*********************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*Calculating total live and dead oysters per quadrat*/
+DATA VolWtCount8;
+	Set VolWtCount7;
+	RETAIN TotalLive TotalDead;
+	TotalLive=LiveOysters+LiveSpat;
+	TotalDead=DeadSubOysters+DeadOysters+DeadSpat;
+RUN;
+/*Coverting to m2 and cu yds/acre*/
+DATA VolWtCount9;
+	Set VolWtCount8;
+	RETAIN TotalVolMeter TotalVolAcre TotalWtMeter TotalWtAcre TotalSubVolMeter TotalSubVolAcre TotalSubWtMeter TotalSubWtAcre LiveMeter LiveAcre DeadMeter DeadAcre DeadRatioMeter DeadRatioAcre;
+	TotalVolMeter=TotalVol*4;
+	TotalVolAcre=TotalVolMeter*5.293088;
+	TotalWtMeter=TotalWt*4;
+	TotalWtAcre=TotalWtMeter*5.35307473;
+	TotalSubVolMeter=TotalSubstrateVol*4;
+	TotalSubVolAcre=TotalSubVolMeter*5.293088;
+	TotalSubWtMeter=TotalSubstrateWt*4;
+	TotalSubWtAcre=TotalSubWtMeter*5.35307473;
+	LiveMeter=TotalLive*4;
+	LiveAcre=(LiveMeter*4047)/1000;
+	DeadMeter=TotalDead*4;
+	DeadAcre=(DeadMeter*4047)/1000;
+	DeadRatio=(DeadMeter/(LiveMeter+DeadMeter));
+RUN;
+/************************************************************************************************************************************************/
+/***************************************THIS DATA SET IS READY FOR ANALYSIS**********************************************************************/
+/************************************************************************************************************************************************/
+DATA VolWtCountFinal;
+	Set VolWtCount9 (Keep=Survey Date Site Station Cultch Quadrat TotalVolMeter TotalVolAcre TotalWtMeter TotalWtAcre TotalSubVolMeter TotalSubVolAcre TotalSubWtMeter TotalSubWtAcre LiveMeter LiveAcre DeadMeter DeadAcre DeadRatio);
+RUN;
+
+
+
+
+
+/*DESCRIPTIVE STATISTICS*/
+/****************COUNTS VOLS WTS*************************************************************************************************************/
+/*Calculating mean and sd of vol, wt, counts by survey, site and cultch*/
+/*Mean Live and DeadRatio by site, survey and cultch*/
+PROC Sort Data=VolWtCountFinal;
+	By Site Survey Cultch;
+PROC Tabulate Data=VolWtCountFinal Out=CultchStats;
+	By Site;
+	Class Survey Cultch;
+	Var LiveMeter DeadRatio;
+	Table Survey, Cultch=' '*(LiveMeter*(Mean Std));
+	Title 'Mean Live per Meter by Quarter and Cultch';
+QUIT;
+
+/*Mean Live and DeadRatio by specific survey and cultch (sites pooled)*/
+DATA Q13;
+	Set VolWtCountFinal;
+	If Survey=13;
+RUN;
+PROC Tabulate Data=Q13 Out=Q1Stats;
+	Class Cultch;
+	Var TotalVolMeter TotalWtMeter TotalSubVolMeter TotalSubWtMeter LiveMeter DeadRatio;
+	Table Cultch=' ',(LiveMeter*(Mean Std) DeadRatio*(Mean Std));
+	Title 'Mean Volume, Weight, Live, and DeadRatio by Meter per Quarter, Site and Cultch';
+QUIT;
+
+
+/*Mean values by site, survey and cultch*/
+/*By Meter*/
+PROC Sort Data=VolWtCountFinal;
+	By Site Survey Cultch;
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStats;
+	Class Site Survey Cultch;
+	Var TotalVolMeter TotalWtMeter TotalSubVolMeter TotalSubWtMeter LiveMeter DeadRatio;
+	Table Site, Survey=' ', Cultch*(TotalVolMeter*(Mean Std) TotalSubVolMeter*(Mean Std) TotalWtMeter*(Mean Std) TotalSubWtMeter*(Mean Std) LiveMeter*(Mean Std) DeadRatio*(Mean Std));
+	Title 'Mean Volume, Weight, Live, and DeadRatio by Meter per Quarter, Site and Cultch';
+QUIT;
+/*By Acre*/
+PROC Sort Data=VolWtCountFinal;
+	By Site Survey Cultch;
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStatsA;
+	Class Site Survey Cultch;
+	Var TotalVolAcre TotalWtAcre TotalSubVolAcre TotalSubWtAcre LiveAcre DeadRatio;
+	Table Site, Survey, Cultch*(TotalVolAcre*(Mean Std) TotalSubVolAcre*(Mean Std) TotalWtAcre*(Mean Std) TotalSubWtAcre*(Mean Std) LiveAcre*(Mean Std) DeadRatio*(Mean Std));
+	Title 'Mean Volume, Weight, Live, and DeadRatio by Acre per Quarter, Site and Cultch';
+QUIT;
+
+
+/*Mean values by site and cultch (surveys pooled)*/
+/*By Meter*/
+PROC Sort Data=VolWtCountFinal;
+	By Site Cultch;
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStats2;
+	Class Site Cultch;
+	Var TotalVolMeter TotalWtMeter TotalSubVolMeter TotalSubWtMeter LiveMeter DeadRatio;
+	Table Site, Cultch*(TotalVolMeter*(Mean Std) TotalSubVolMeter*(Mean Std) TotalWtMeter*(Mean Std) TotalSubWtMeter*(Mean Std) LiveMeter*(Mean Std) DeadRatio*(Mean Std));
+	Title 'Mean Volume, Weight, Live, and DeadRatio by Meter per Site and Cultch';
+QUIT;
+/*By Acre*/
+PROC Sort Data=VolWtCountFinal;
+	By Site Cultch;
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStats2A;
+	Class Site Cultch;
+	Var TotalVolAcre TotalWtAcre TotalSubVolAcre TotalSubWtAcre LiveAcre DeadRatio;
+	Table Site, Cultch*(TotalVolAcre*(Mean Std) TotalSubVolAcre*(Mean Std) TotalWtAcre*(Mean Std) TotalSubWtAcre*(Mean Std) LiveAcre*(Mean Std) DeadRatio*(Mean Std));
+	Title 'Mean Volume, Weight, Live, and DeadRatio by Acre per Site and Cultch';
+QUIT;
+
+
+/*Mean values by cultch (site and surveys pooled)*/
+/*By Meter*/
+PROC Sort Data=VolWtCountFinal;
+	By Cultch;
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStats3;
+	Class Cultch;
+	Var TotalVolMeter TotalWtMeter TotalSubVolMeter TotalSubWtMeter LiveMeter DeadRatio;
+	Table Cultch,(TotalVolMeter*(Mean Std) TotalSubVolMeter*(Mean Std) TotalWtMeter*(Mean Std) TotalSubWtMeter*(Mean Std) LiveMeter*(Mean StdErr) DeadRatio*(Mean Std));
+	Title 'Mean Volume, Weight, Live, and DeadRatio by Meter per Cultch';
+QUIT;
+/*By Acre*/
+PROC Sort Data=VolWtCountFinal;
+	By Cultch;
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStats3;
+	Class Cultch;
+	Var TotalVolAcre TotalWtAcre TotalSubVolAcre TotalSubWtAcre LiveAcre DeadRatio;
+	Table Cultch, (TotalVolAcre*(Mean Std) TotalSubVolAcre*(Mean Std) TotalWtAcre*(Mean Std) TotalSubWtAcre*(Mean Std) LiveAcre*(Mean Std) DeadRatio*(Mean Std));
+	Title 'Mean Volume, Weight, Live, and DeadRatio by Cultch';
+QUIT;
+
+
+
+/*Calculating OVERALL mean and sd of substrate vol and wt by site and cultch (surveys pooled)*/
+PROC Sort Data=VolWtCountFinal;
+	By Site Cultch;
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStats4;
+	Class Site Cultch;
+	Var TotalSubVolMeter;
+	Table Site, Cultch*(TotalSubVolMeter*(Mean Std));
+	Title 'Mean Volume by Meter per Site and Cultch';
+QUIT;
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStats4;
+	Class Site Cultch;
+	Var TotalSubWtMeter;
+	Table Site, Cultch*(TotalSubWtMeter*(Mean Std));
+	Title 'Mean Weight by Meter per Site and Cultch';
+QUIT;
+
+
+
+/***************SHELL HEIGHT********************************************************************************************************************/
+/*Mean Shell Height by survey, site and cultch*/
+PROC Sort Data=SH1;
+	By Site Survey Cultch;
+PROC Tabulate Data=SH1 Out=SHStats;
+	Class Site Survey Cultch;
+	Var SH;
+	Table Site, Survey, Cultch*(SH*(Mean Std));
+	Title 'Mean Shell Height by Quarter, Site and Cultch';
+QUIT;
+
+/*Mean Shell Height by site and cultch (surveys pooled)*/
+PROC Sort Data=SH1;
+	By Site Cultch;
+PROC Tabulate Data=SH1 Out=SHStats2;
+	Class Site Cultch;
+	Var SH;
+	Table Site, Cultch*(SH*(Mean Std));
+	Title 'Mean Shell Height by Site and Cultch';
+QUIT;
+
+/*Mean Shell Height by cultch (site and survey pooled)*/
+PROC Sort Data=SH1;
+	By Cultch;
+PROC Tabulate Data=SH1 Out=SHStats3;
+	Class Cultch;
+	Var SH;
+	Table Cultch, (SH*(Mean Std));
+	Title 'Mean Shell Height by Cultch';
+QUIT;
+
+/*Mean Shell Height by site and survey (cultch pooled)*/
+PROC Sort Data=SH1;
+	By Cultch;
+PROC Tabulate Data=SH1 Out=SHStats3;
+	Class Site Survey;
+	Var SH;
+	Table Survey, Site*(SH*(Mean Std));
+	Title 'Mean Shell Height by Site and Survey';
+QUIT;
+
+/**************SHELL HEIGHT FREQS**************************/
+/*Calculating shell height frequencies by site and quarter*/
+PROC Sort Data=SH1;
+	By Site Survey;
+QUIT;
+PROC FREQ Data=SH1;
+	By Site;
+	Tables Survey*SH / nocum norow nocol nopercent out=SHCounts;
+QUIT;
+PROC Tabulate Data=SHCounts Out=SHFreq;
+	Class Site Survey SH;
+	Var Count;
+	Table SH, Survey*Site*(Count);
+	Title 'Shell Height Frequencies';
+QUIT;
+
+
+
+/*************WATER QUALITY*******************************************************************************************************************/
+/*Calculating % Secchi Penetration*/
+DATA WQ2;
+	Set WQ1;
+	RETAIN SecchiPercent;
+	SecchiPercent=(Secchi/Depth)*100;
+RUN;
+
+/*Mean WQ by survey, site and cultch*/
+PROC Sort Data=WQ2;
+	By Site Survey Cultch;
+PROC Tabulate Data=WQ2 Out=WQStats;
+	Class Site Survey Cultch;
+	Var Temp Salinity DO pH Depth SecchiPercent Turbidity DOPct;
+	Table Site, Survey, Cultch*(Temp*(Mean Std) Salinity*(Mean Std) DO*(Mean Std) pH*(Mean Std) Depth*(Mean Std) SecchiPercent*(Mean Std));
+	Title 'Mean WQ per Site and Station';
+QUIT;
+
+
+
+/*Final Results for SAS Results file************************************************************************************************************/
+DATA AllStats;
+	Merge VolWtCountStats (drop=_TYPE_ _PAGE_ _TABLE_) SHStats (Drop=_TYPE_ _PAGE_ _TABLE_);
+RUN;
+
+/*VOLUME and WEIGHT by Site, Survey and Cultch*/
+PROC Sort Data=AllStats;
+	By Site Survey Cultch;
+PROC Tabulate Data=AllStats Out=NFWFVols;
+	Class Site Survey Cultch;
+	Var TotalVolMeter_Mean TotalVolMeter_Std;
+	Table Site, Survey=' ', Cultch*(TotalVolMeter_Mean TotalVolMeter_Std);
+	Title 'Mean Volumes by Quarter, Site and Station';
+QUIT;
+PROC Tabulate Data=AllStats Out=NFWFSubVols;
+	Class Site Survey Cultch;
+	Var TotalSubVolMeter_Mean TotalSubVolMeter_Std;
+	Table Site, Survey=' ', Cultch*(TotalSubVolMeter_Mean TotalSubVolMeter_Std);
+	Title 'Mean Substrate Volumes by Quarter, Site and Station';
+QUIT;
+PROC Tabulate Data=AllStats Out=NFWFWts;
+	Class Site Survey Cultch;
+	Var TotalWtMeter_Mean TotalWtMeter_Std;
+	Table Site, Survey=' ', Cultch*(TotalWtMeter_Mean TotalWtMeter_Std);
+	Title 'Mean Weights by Quarter, Site and Station';
+QUIT;
+PROC Tabulate Data=AllStats Out=NFWFSubWts;
+	Class Site Survey Cultch;
+	Var TotalSubWtMeter_Mean TotalSubWtMeter_Std;
+	Table Site, Survey=' ', Cultch*(TotalSubWtMeter_Mean TotalSubWtMeter_Std);
+	Title 'Mean Substrate Weights by Quarter, Site and Station';
+QUIT;
+/*OVERALL VOLUME and WEIGHT by Site and Cultch (surveys pooled)*/
+PROC Tabulate Data=VolWtCountFinal Out=VolWtCountStats4;
+	Class Site Cultch;
+	Var TotalSubVolMeter;
+	Table Site=' ', Cultch*(TotalSubVolMeter*(Mean Std));
+	Title 'Mean Volume by Meter per Site and Cultch';
+QUIT;
+
+
+/*LIVE, DEADRATIO and SH by Site, Survey and Cultch*/
+PROC Sort Data=AllStats;
+	By Site Survey Cultch;
+PROC Tabulate Data=AllStats Out=NFWFLive;
+	Class Site Survey Cultch;
+	Var LiveMeter_Mean LiveMeter_Std;
+	Table Site, Survey=' ', Cultch*(LiveMeter_Mean LiveMeter_Std);
+	Title 'Mean Live Counts by Quarter, Site and Station';
+QUIT;
+PROC Tabulate Data=AllStats Out=NFWFDead;
+	Class Site Survey Cultch;
+	Var DeadRatio_Mean DeadRatio_Std;
+	Table Site, Survey=' ', Cultch*(DeadRatio_Mean DeadRatio_Std);
+	Title 'Mean Dead Ratio by Quarter, Site and Station';
+QUIT;
+PROC Tabulate Data=AllStats Out=NFWFSHs;
+	Class Site Survey Cultch;
+	Var SH_Mean SH_Std;
+	Table Site, Survey=' ', Cultch*(SH_Mean SH_Std);
+	Title 'Mean SH by Quarter, Site and Station';
+QUIT;
+PROC Tabulate Data=SHCounts;
+	Class Site Survey SH;
+	Var Count;
+	Table SH=' ', Survey=' '*Site*(Count);
+	Title 'Shell Height Frequencies';
+QUIT;
+
+
+/*WQ by Site, Survey and Cultch*/
+PROC Sort Data=WQStats;
+	By Site Survey Cultch;
+QUIT;
+PROC Tabulate Data=WQStats Out=Temp;
+	Class Site Survey Cultch;
+	Var Temp_Mean;
+	Table Survey=' ', Site*Cultch*(Temp_Mean);
+	Title 'Temperature at each Site and Station';
+QUIT;
+PROC Tabulate Data=WQStats Out=Salinity;
+	Class Site Survey Cultch;
+	Var Salinity_Mean;
+	Table Survey=' ', Site*Cultch*(Salinity_Mean);
+	Title 'Salinity at each Site and Station';
+QUIT;
+PROC Tabulate Data=WQStats Out=DO;
+	Class Site Survey Cultch;
+	Var DO_Mean;
+	Table Survey=' ', Site*Cultch*(DO_Mean);
+	Title 'DO at each Site and Station';
+QUIT;
+PROC Tabulate Data=WQStats Out=pH;
+	Class Site Survey Cultch;
+	Var pH_Mean;
+	Table Survey=' ', Site*Cultch*(pH_Mean);
+	Title 'pH at each Site and Station';
+QUIT;
+PROC Tabulate Data=WQStats Out=Depth;
+	Class Site Survey Cultch;
+	Var Depth_Mean;
+	Table Survey=' ', Site*Cultch*(Depth_Mean);
+	Title 'Depth at each Site and Station';
+QUIT;
+PROC Tabulate Data=WQStats Out=Secchi;
+	Class Site Survey Cultch;
+	Var SecchiPercent_Mean;
+	Table Survey=' ', Site*Cultch*(SecchiPercent_Mean);
+	Title 'Secchi Percent at each Site and Station';
+QUIT;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
