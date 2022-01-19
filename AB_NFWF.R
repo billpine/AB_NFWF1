@@ -378,294 +378,294 @@ test9 = cbind(newdata9, predict(m7,
                                 type = 'response', se.fit = T))
 
 
-
-
-#plot for period 2
-par(mfrow=c(1,3))
-plot(test2$Cultch[1:5], test2$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
-lines(test2$Cultch[6:10], test2$fit[6:10], lwd = 2, col = 'red')
-polygon(x = c(test2$Cultch[1:5], rev(test2$Cultch[1:5])),
-        y = c(test2$fit[1:5] - 2*test2$se.fit[1:5], 
-              rev(test2$fit[1:5] + 2*test2$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test2$Cultch[6:10], rev(test2$Cultch[6:10])),
-        y = c(test2$fit[6:10] - 2*test2$se.fit[6:10], 
-              rev(test2$fit[6:10] + 2*test2$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Bulkhead")
-
-plot(test2$Cultch[11:15], test2$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
-lines(test2$Cultch[16:20], test2$fit[16:20], lwd = 2, col = 'red')
-polygon(x = c(test2$Cultch[11:15], rev(test2$Cultch[11:15])),
-        y = c(test2$fit[11:15] - 2*test2$se.fit[11:15], 
-              rev(test2$fit[11:15] + 2*test2$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test2$Cultch[16:20], rev(test2$Cultch[16:20])),
-        y = c(test2$fit[16:20] - 2*test2$se.fit[16:20], 
-              rev(test2$fit[16:20] + 2*test2$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Dry Bar")
-
-plot(test2$Cultch[21:25], test2$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
-lines(test2$Cultch[26:30], test2$fit[26:30], lwd = 2, col = 'red')
-polygon(x = c(test2$Cultch[21:25], rev(test2$Cultch[21:25])),
-        y = c(test2$fit[21:25] - 2*test2$se.fit[21:25], 
-              rev(test2$fit[21:25] + 2*test2$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test2$Cultch[26:30], rev(test2$Cultch[26:30])),
-        y = c(test2$fit[26:30] - 2*test2$se.fit[26:30], 
-              rev(test2$fit[26:30] + 2*test2$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Hotel Bar")
-
-#plot for period 3
-par(mfrow=c(1,3))
-plot(test3$Cultch[1:5], test3$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
-lines(test3$Cultch[6:10], test3$fit[6:10], lwd = 2, col = 'red')
-polygon(x = c(test3$Cultch[1:5], rev(test3$Cultch[1:5])),
-        y = c(test3$fit[1:5] - 2*test3$se.fit[1:5], 
-              rev(test3$fit[1:5] + 2*test3$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test3$Cultch[6:10], rev(test3$Cultch[6:10])),
-        y = c(test3$fit[6:10] - 2*test3$se.fit[6:10], 
-              rev(test3$fit[6:10] + 2*test3$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Bulkhead")
-
-plot(test3$Cultch[11:15], test3$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
-lines(test3$Cultch[16:20], test3$fit[16:20], lwd = 2, col = 'red')
-polygon(x = c(test3$Cultch[11:15], rev(test3$Cultch[11:15])),
-        y = c(test3$fit[11:15] - 2*test3$se.fit[11:15], 
-              rev(test3$fit[11:15] + 2*test3$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test3$Cultch[16:20], rev(test3$Cultch[16:20])),
-        y = c(test3$fit[16:20] - 2*test3$se.fit[16:20], 
-              rev(test3$fit[16:20] + 2*test3$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Dry Bar")
-
-plot(test3$Cultch[21:25], test3$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
-lines(test3$Cultch[26:30], test3$fit[26:30], lwd = 2, col = 'red')
-polygon(x = c(test3$Cultch[21:25], rev(test3$Cultch[21:25])),
-        y = c(test3$fit[21:25] - 2*test3$se.fit[21:25], 
-              rev(test3$fit[21:25] + 2*test3$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test3$Cultch[26:30], rev(test3$Cultch[26:30])),
-        y = c(test3$fit[26:30] - 2*test3$se.fit[26:30], 
-              rev(test3$fit[26:30] + 2*test3$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Hotel Bar")
-
-#plot for period 4
-par(mfrow=c(1,3))
-plot(test4$Cultch[1:5], test4$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
-lines(test4$Cultch[6:10], test4$fit[6:10], lwd = 2, col = 'red')
-polygon(x = c(test4$Cultch[1:5], rev(test4$Cultch[1:5])),
-        y = c(test4$fit[1:5] - 2*test4$se.fit[1:5], 
-              rev(test4$fit[1:5] + 2*test4$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test4$Cultch[6:10], rev(test4$Cultch[6:10])),
-        y = c(test4$fit[6:10] - 2*test4$se.fit[6:10], 
-              rev(test4$fit[6:10] + 2*test4$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Bulkhead")
-
-plot(test4$Cultch[11:15], test4$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
-lines(test4$Cultch[16:20], test4$fit[16:20], lwd = 2, col = 'red')
-polygon(x = c(test4$Cultch[11:15], rev(test4$Cultch[11:15])),
-        y = c(test4$fit[11:15] - 2*test4$se.fit[11:15], 
-              rev(test4$fit[11:15] + 2*test4$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test4$Cultch[16:20], rev(test4$Cultch[16:20])),
-        y = c(test4$fit[16:20] - 2*test4$se.fit[16:20], 
-              rev(test4$fit[16:20] + 2*test4$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Dry Bar")
-
-plot(test4$Cultch[21:25], test4$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
-lines(test4$Cultch[26:30], test4$fit[26:30], lwd = 2, col = 'red')
-polygon(x = c(test4$Cultch[21:25], rev(test4$Cultch[21:25])),
-        y = c(test4$fit[21:25] - 2*test4$se.fit[21:25], 
-              rev(test4$fit[21:25] + 2*test4$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test4$Cultch[26:30], rev(test4$Cultch[26:30])),
-        y = c(test4$fit[26:30] - 2*test4$se.fit[26:30], 
-              rev(test4$fit[26:30] + 2*test4$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Hotel Bar")
-
-#plot for period 5
-par(mfrow=c(1,3))
-plot(test5$Cultch[1:5], test5$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
-lines(test5$Cultch[6:10], test5$fit[6:10], lwd = 2, col = 'red')
-polygon(x = c(test5$Cultch[1:5], rev(test5$Cultch[1:5])),
-        y = c(test5$fit[1:5] - 2*test5$se.fit[1:5], 
-              rev(test5$fit[1:5] + 2*test5$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test5$Cultch[6:10], rev(test5$Cultch[6:10])),
-        y = c(test5$fit[6:10] - 2*test5$se.fit[6:10], 
-              rev(test5$fit[6:10] + 2*test5$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Bulkhead")
-
-plot(test5$Cultch[11:15], test5$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
-lines(test5$Cultch[16:20], test5$fit[16:20], lwd = 2, col = 'red')
-polygon(x = c(test5$Cultch[11:15], rev(test5$Cultch[11:15])),
-        y = c(test5$fit[11:15] - 2*test5$se.fit[11:15], 
-              rev(test5$fit[11:15] + 2*test5$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test5$Cultch[16:20], rev(test5$Cultch[16:20])),
-        y = c(test5$fit[16:20] - 2*test5$se.fit[16:20], 
-              rev(test5$fit[16:20] + 2*test5$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Dry Bar")
-
-plot(test5$Cultch[21:25], test5$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
-lines(test5$Cultch[26:30], test5$fit[26:30], lwd = 2, col = 'red')
-polygon(x = c(test5$Cultch[21:25], rev(test5$Cultch[21:25])),
-        y = c(test5$fit[21:25] - 2*test5$se.fit[21:25], 
-              rev(test5$fit[21:25] + 2*test5$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test5$Cultch[26:30], rev(test5$Cultch[26:30])),
-        y = c(test5$fit[26:30] - 2*test5$se.fit[26:30], 
-              rev(test5$fit[26:30] + 2*test5$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Hotel Bar")
-
-#plot for period 6
-par(mfrow=c(1,3))
-plot(test6$Cultch[1:5], test6$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
-lines(test6$Cultch[6:10], test6$fit[6:10], lwd = 2, col = 'red')
-polygon(x = c(test6$Cultch[1:5], rev(test6$Cultch[1:5])),
-        y = c(test6$fit[1:5] - 2*test6$se.fit[1:5], 
-              rev(test6$fit[1:5] + 2*test6$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test6$Cultch[6:10], rev(test6$Cultch[6:10])),
-        y = c(test6$fit[6:10] - 2*test6$se.fit[6:10], 
-              rev(test6$fit[6:10] + 2*test6$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Bulkhead")
-
-plot(test6$Cultch[11:15], test6$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
-lines(test6$Cultch[16:20], test6$fit[16:20], lwd = 2, col = 'red')
-polygon(x = c(test6$Cultch[11:15], rev(test6$Cultch[11:15])),
-        y = c(test6$fit[11:15] - 2*test6$se.fit[11:15], 
-              rev(test6$fit[11:15] + 2*test6$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test6$Cultch[16:20], rev(test6$Cultch[16:20])),
-        y = c(test6$fit[16:20] - 2*test6$se.fit[16:20], 
-              rev(test6$fit[16:20] + 2*test6$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Dry Bar")
-
-plot(test6$Cultch[21:25], test6$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
-lines(test6$Cultch[26:30], test6$fit[26:30], lwd = 2, col = 'red')
-polygon(x = c(test6$Cultch[21:25], rev(test6$Cultch[21:25])),
-        y = c(test6$fit[21:25] - 2*test6$se.fit[21:25], 
-              rev(test6$fit[21:25] + 2*test6$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test6$Cultch[26:30], rev(test6$Cultch[26:30])),
-        y = c(test6$fit[26:30] - 2*test6$se.fit[26:30], 
-              rev(test6$fit[26:30] + 2*test6$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Hotel Bar")
-
-#plot for period 7
-par(mfrow=c(1,3))
-plot(test7$Cultch[1:5], test7$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
-lines(test7$Cultch[6:10], test7$fit[6:10], lwd = 2, col = 'red')
-polygon(x = c(test7$Cultch[1:5], rev(test7$Cultch[1:5])),
-        y = c(test7$fit[1:5] - 2*test7$se.fit[1:5], 
-              rev(test7$fit[1:5] + 2*test7$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test7$Cultch[6:10], rev(test7$Cultch[6:10])),
-        y = c(test7$fit[6:10] - 2*test7$se.fit[6:10], 
-              rev(test7$fit[6:10] + 2*test7$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Bulkhead")
-
-plot(test7$Cultch[11:15], test7$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
-lines(test7$Cultch[16:20], test7$fit[16:20], lwd = 2, col = 'red')
-polygon(x = c(test7$Cultch[11:15], rev(test7$Cultch[11:15])),
-        y = c(test7$fit[11:15] - 2*test7$se.fit[11:15], 
-              rev(test7$fit[11:15] + 2*test7$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test7$Cultch[16:20], rev(test7$Cultch[16:20])),
-        y = c(test7$fit[16:20] - 2*test7$se.fit[16:20], 
-              rev(test7$fit[16:20] + 2*test7$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Dry Bar")
-
-plot(test7$Cultch[21:25], test7$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
-lines(test7$Cultch[26:30], test7$fit[26:30], lwd = 2, col = 'red')
-polygon(x = c(test7$Cultch[21:25], rev(test7$Cultch[21:25])),
-        y = c(test7$fit[21:25] - 2*test7$se.fit[21:25], 
-              rev(test7$fit[21:25] + 2*test7$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test7$Cultch[26:30], rev(test7$Cultch[26:30])),
-        y = c(test7$fit[26:30] - 2*test7$se.fit[26:30], 
-              rev(test7$fit[26:30] + 2*test7$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Hotel Bar")
-
-#plot for period 8
-par(mfrow=c(1,3))
-plot(test8$Cultch[1:5], test8$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
-lines(test8$Cultch[6:10], test8$fit[6:10], lwd = 2, col = 'red')
-polygon(x = c(test8$Cultch[1:5], rev(test8$Cultch[1:5])),
-        y = c(test8$fit[1:5] - 2*test8$se.fit[1:5], 
-              rev(test8$fit[1:5] + 2*test8$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test8$Cultch[6:10], rev(test8$Cultch[6:10])),
-        y = c(test8$fit[6:10] - 2*test8$se.fit[6:10], 
-              rev(test8$fit[6:10] + 2*test8$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Bulkhead")
-
-plot(test8$Cultch[11:15], test8$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
-lines(test8$Cultch[16:20], test8$fit[16:20], lwd = 2, col = 'red')
-polygon(x = c(test8$Cultch[11:15], rev(test8$Cultch[11:15])),
-        y = c(test8$fit[11:15] - 2*test8$se.fit[11:15], 
-              rev(test8$fit[11:15] + 2*test8$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test8$Cultch[16:20], rev(test8$Cultch[16:20])),
-        y = c(test8$fit[16:20] - 2*test8$se.fit[16:20], 
-              rev(test8$fit[16:20] + 2*test8$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Dry Bar")
-
-plot(test8$Cultch[21:25], test8$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
-lines(test8$Cultch[26:30], test8$fit[26:30], lwd = 2, col = 'red')
-polygon(x = c(test8$Cultch[21:25], rev(test8$Cultch[21:25])),
-        y = c(test8$fit[21:25] - 2*test8$se.fit[21:25], 
-              rev(test8$fit[21:25] + 2*test8$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
-polygon(x = c(test8$Cultch[26:30], rev(test8$Cultch[26:30])),
-        y = c(test8$fit[26:30] - 2*test8$se.fit[26:30], 
-              rev(test8$fit[26:30] + 2*test8$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
-legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
-points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
-title("NFWF Hotel Bar")
+# 
+# 
+# #plot for period 2
+# par(mfrow=c(1,3))
+# plot(test2$Cultch[1:5], test2$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
+# lines(test2$Cultch[6:10], test2$fit[6:10], lwd = 2, col = 'red')
+# polygon(x = c(test2$Cultch[1:5], rev(test2$Cultch[1:5])),
+#         y = c(test2$fit[1:5] - 2*test2$se.fit[1:5], 
+#               rev(test2$fit[1:5] + 2*test2$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test2$Cultch[6:10], rev(test2$Cultch[6:10])),
+#         y = c(test2$fit[6:10] - 2*test2$se.fit[6:10], 
+#               rev(test2$fit[6:10] + 2*test2$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Bulkhead")
+# 
+# plot(test2$Cultch[11:15], test2$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
+# lines(test2$Cultch[16:20], test2$fit[16:20], lwd = 2, col = 'red')
+# polygon(x = c(test2$Cultch[11:15], rev(test2$Cultch[11:15])),
+#         y = c(test2$fit[11:15] - 2*test2$se.fit[11:15], 
+#               rev(test2$fit[11:15] + 2*test2$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test2$Cultch[16:20], rev(test2$Cultch[16:20])),
+#         y = c(test2$fit[16:20] - 2*test2$se.fit[16:20], 
+#               rev(test2$fit[16:20] + 2*test2$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Dry Bar")
+# 
+# plot(test2$Cultch[21:25], test2$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
+# lines(test2$Cultch[26:30], test2$fit[26:30], lwd = 2, col = 'red')
+# polygon(x = c(test2$Cultch[21:25], rev(test2$Cultch[21:25])),
+#         y = c(test2$fit[21:25] - 2*test2$se.fit[21:25], 
+#               rev(test2$fit[21:25] + 2*test2$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test2$Cultch[26:30], rev(test2$Cultch[26:30])),
+#         y = c(test2$fit[26:30] - 2*test2$se.fit[26:30], 
+#               rev(test2$fit[26:30] + 2*test2$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Hotel Bar")
+# 
+# #plot for period 3
+# par(mfrow=c(1,3))
+# plot(test3$Cultch[1:5], test3$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
+# lines(test3$Cultch[6:10], test3$fit[6:10], lwd = 2, col = 'red')
+# polygon(x = c(test3$Cultch[1:5], rev(test3$Cultch[1:5])),
+#         y = c(test3$fit[1:5] - 2*test3$se.fit[1:5], 
+#               rev(test3$fit[1:5] + 2*test3$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test3$Cultch[6:10], rev(test3$Cultch[6:10])),
+#         y = c(test3$fit[6:10] - 2*test3$se.fit[6:10], 
+#               rev(test3$fit[6:10] + 2*test3$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Bulkhead")
+# 
+# plot(test3$Cultch[11:15], test3$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
+# lines(test3$Cultch[16:20], test3$fit[16:20], lwd = 2, col = 'red')
+# polygon(x = c(test3$Cultch[11:15], rev(test3$Cultch[11:15])),
+#         y = c(test3$fit[11:15] - 2*test3$se.fit[11:15], 
+#               rev(test3$fit[11:15] + 2*test3$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test3$Cultch[16:20], rev(test3$Cultch[16:20])),
+#         y = c(test3$fit[16:20] - 2*test3$se.fit[16:20], 
+#               rev(test3$fit[16:20] + 2*test3$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Dry Bar")
+# 
+# plot(test3$Cultch[21:25], test3$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
+# lines(test3$Cultch[26:30], test3$fit[26:30], lwd = 2, col = 'red')
+# polygon(x = c(test3$Cultch[21:25], rev(test3$Cultch[21:25])),
+#         y = c(test3$fit[21:25] - 2*test3$se.fit[21:25], 
+#               rev(test3$fit[21:25] + 2*test3$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test3$Cultch[26:30], rev(test3$Cultch[26:30])),
+#         y = c(test3$fit[26:30] - 2*test3$se.fit[26:30], 
+#               rev(test3$fit[26:30] + 2*test3$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Hotel Bar")
+# 
+# #plot for period 4
+# par(mfrow=c(1,3))
+# plot(test4$Cultch[1:5], test4$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
+# lines(test4$Cultch[6:10], test4$fit[6:10], lwd = 2, col = 'red')
+# polygon(x = c(test4$Cultch[1:5], rev(test4$Cultch[1:5])),
+#         y = c(test4$fit[1:5] - 2*test4$se.fit[1:5], 
+#               rev(test4$fit[1:5] + 2*test4$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test4$Cultch[6:10], rev(test4$Cultch[6:10])),
+#         y = c(test4$fit[6:10] - 2*test4$se.fit[6:10], 
+#               rev(test4$fit[6:10] + 2*test4$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Bulkhead")
+# 
+# plot(test4$Cultch[11:15], test4$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
+# lines(test4$Cultch[16:20], test4$fit[16:20], lwd = 2, col = 'red')
+# polygon(x = c(test4$Cultch[11:15], rev(test4$Cultch[11:15])),
+#         y = c(test4$fit[11:15] - 2*test4$se.fit[11:15], 
+#               rev(test4$fit[11:15] + 2*test4$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test4$Cultch[16:20], rev(test4$Cultch[16:20])),
+#         y = c(test4$fit[16:20] - 2*test4$se.fit[16:20], 
+#               rev(test4$fit[16:20] + 2*test4$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Dry Bar")
+# 
+# plot(test4$Cultch[21:25], test4$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
+# lines(test4$Cultch[26:30], test4$fit[26:30], lwd = 2, col = 'red')
+# polygon(x = c(test4$Cultch[21:25], rev(test4$Cultch[21:25])),
+#         y = c(test4$fit[21:25] - 2*test4$se.fit[21:25], 
+#               rev(test4$fit[21:25] + 2*test4$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test4$Cultch[26:30], rev(test4$Cultch[26:30])),
+#         y = c(test4$fit[26:30] - 2*test4$se.fit[26:30], 
+#               rev(test4$fit[26:30] + 2*test4$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Hotel Bar")
+# 
+# #plot for period 5
+# par(mfrow=c(1,3))
+# plot(test5$Cultch[1:5], test5$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
+# lines(test5$Cultch[6:10], test5$fit[6:10], lwd = 2, col = 'red')
+# polygon(x = c(test5$Cultch[1:5], rev(test5$Cultch[1:5])),
+#         y = c(test5$fit[1:5] - 2*test5$se.fit[1:5], 
+#               rev(test5$fit[1:5] + 2*test5$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test5$Cultch[6:10], rev(test5$Cultch[6:10])),
+#         y = c(test5$fit[6:10] - 2*test5$se.fit[6:10], 
+#               rev(test5$fit[6:10] + 2*test5$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Bulkhead")
+# 
+# plot(test5$Cultch[11:15], test5$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
+# lines(test5$Cultch[16:20], test5$fit[16:20], lwd = 2, col = 'red')
+# polygon(x = c(test5$Cultch[11:15], rev(test5$Cultch[11:15])),
+#         y = c(test5$fit[11:15] - 2*test5$se.fit[11:15], 
+#               rev(test5$fit[11:15] + 2*test5$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test5$Cultch[16:20], rev(test5$Cultch[16:20])),
+#         y = c(test5$fit[16:20] - 2*test5$se.fit[16:20], 
+#               rev(test5$fit[16:20] + 2*test5$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Dry Bar")
+# 
+# plot(test5$Cultch[21:25], test5$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
+# lines(test5$Cultch[26:30], test5$fit[26:30], lwd = 2, col = 'red')
+# polygon(x = c(test5$Cultch[21:25], rev(test5$Cultch[21:25])),
+#         y = c(test5$fit[21:25] - 2*test5$se.fit[21:25], 
+#               rev(test5$fit[21:25] + 2*test5$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test5$Cultch[26:30], rev(test5$Cultch[26:30])),
+#         y = c(test5$fit[26:30] - 2*test5$se.fit[26:30], 
+#               rev(test5$fit[26:30] + 2*test5$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Hotel Bar")
+# 
+# #plot for period 6
+# par(mfrow=c(1,3))
+# plot(test6$Cultch[1:5], test6$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
+# lines(test6$Cultch[6:10], test6$fit[6:10], lwd = 2, col = 'red')
+# polygon(x = c(test6$Cultch[1:5], rev(test6$Cultch[1:5])),
+#         y = c(test6$fit[1:5] - 2*test6$se.fit[1:5], 
+#               rev(test6$fit[1:5] + 2*test6$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test6$Cultch[6:10], rev(test6$Cultch[6:10])),
+#         y = c(test6$fit[6:10] - 2*test6$se.fit[6:10], 
+#               rev(test6$fit[6:10] + 2*test6$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Bulkhead")
+# 
+# plot(test6$Cultch[11:15], test6$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
+# lines(test6$Cultch[16:20], test6$fit[16:20], lwd = 2, col = 'red')
+# polygon(x = c(test6$Cultch[11:15], rev(test6$Cultch[11:15])),
+#         y = c(test6$fit[11:15] - 2*test6$se.fit[11:15], 
+#               rev(test6$fit[11:15] + 2*test6$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test6$Cultch[16:20], rev(test6$Cultch[16:20])),
+#         y = c(test6$fit[16:20] - 2*test6$se.fit[16:20], 
+#               rev(test6$fit[16:20] + 2*test6$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Dry Bar")
+# 
+# plot(test6$Cultch[21:25], test6$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
+# lines(test6$Cultch[26:30], test6$fit[26:30], lwd = 2, col = 'red')
+# polygon(x = c(test6$Cultch[21:25], rev(test6$Cultch[21:25])),
+#         y = c(test6$fit[21:25] - 2*test6$se.fit[21:25], 
+#               rev(test6$fit[21:25] + 2*test6$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test6$Cultch[26:30], rev(test6$Cultch[26:30])),
+#         y = c(test6$fit[26:30] - 2*test6$se.fit[26:30], 
+#               rev(test6$fit[26:30] + 2*test6$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Hotel Bar")
+# 
+# #plot for period 7
+# par(mfrow=c(1,3))
+# plot(test7$Cultch[1:5], test7$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
+# lines(test7$Cultch[6:10], test7$fit[6:10], lwd = 2, col = 'red')
+# polygon(x = c(test7$Cultch[1:5], rev(test7$Cultch[1:5])),
+#         y = c(test7$fit[1:5] - 2*test7$se.fit[1:5], 
+#               rev(test7$fit[1:5] + 2*test7$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test7$Cultch[6:10], rev(test7$Cultch[6:10])),
+#         y = c(test7$fit[6:10] - 2*test7$se.fit[6:10], 
+#               rev(test7$fit[6:10] + 2*test7$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Bulkhead")
+# 
+# plot(test7$Cultch[11:15], test7$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
+# lines(test7$Cultch[16:20], test7$fit[16:20], lwd = 2, col = 'red')
+# polygon(x = c(test7$Cultch[11:15], rev(test7$Cultch[11:15])),
+#         y = c(test7$fit[11:15] - 2*test7$se.fit[11:15], 
+#               rev(test7$fit[11:15] + 2*test7$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test7$Cultch[16:20], rev(test7$Cultch[16:20])),
+#         y = c(test7$fit[16:20] - 2*test7$se.fit[16:20], 
+#               rev(test7$fit[16:20] + 2*test7$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Dry Bar")
+# 
+# plot(test7$Cultch[21:25], test7$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
+# lines(test7$Cultch[26:30], test7$fit[26:30], lwd = 2, col = 'red')
+# polygon(x = c(test7$Cultch[21:25], rev(test7$Cultch[21:25])),
+#         y = c(test7$fit[21:25] - 2*test7$se.fit[21:25], 
+#               rev(test7$fit[21:25] + 2*test7$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test7$Cultch[26:30], rev(test7$Cultch[26:30])),
+#         y = c(test7$fit[26:30] - 2*test7$se.fit[26:30], 
+#               rev(test7$fit[26:30] + 2*test7$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Hotel Bar")
+# 
+# #plot for period 8
+# par(mfrow=c(1,3))
+# plot(test8$Cultch[1:5], test8$fit[1:5], type = 'l', lwd = 2, ylim = c(0, 800), xlab = "Cultch", ylab = "Live Spat")
+# lines(test8$Cultch[6:10], test8$fit[6:10], lwd = 2, col = 'red')
+# polygon(x = c(test8$Cultch[1:5], rev(test8$Cultch[1:5])),
+#         y = c(test8$fit[1:5] - 2*test8$se.fit[1:5], 
+#               rev(test8$fit[1:5] + 2*test8$se.fit[1:5])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test8$Cultch[6:10], rev(test8$Cultch[6:10])),
+#         y = c(test8$fit[6:10] - 2*test8$se.fit[6:10], 
+#               rev(test8$fit[6:10] + 2*test8$se.fit[6:10])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Bulkhead" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Bulkhead")
+# 
+# plot(test8$Cultch[11:15], test8$fit[11:15], type = 'l', lwd = 2, ylim = c(0, 150), xlab = "Cultch", ylab = "Live Spat")
+# lines(test8$Cultch[16:20], test8$fit[16:20], lwd = 2, col = 'red')
+# polygon(x = c(test8$Cultch[11:15], rev(test8$Cultch[11:15])),
+#         y = c(test8$fit[11:15] - 2*test8$se.fit[11:15], 
+#               rev(test8$fit[11:15] + 2*test8$se.fit[11:15])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test8$Cultch[16:20], rev(test8$Cultch[16:20])),
+#         y = c(test8$fit[16:20] - 2*test8$se.fit[16:20], 
+#               rev(test8$fit[16:20] + 2*test8$se.fit[16:20])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Dry Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Dry Bar")
+# 
+# plot(test8$Cultch[21:25], test8$fit[21:25], type = 'l', lwd = 2, ylim = c(0, 700), xlab = "Cultch", ylab = "Live Spat")
+# lines(test8$Cultch[26:30], test8$fit[26:30], lwd = 2, col = 'red')
+# polygon(x = c(test8$Cultch[21:25], rev(test8$Cultch[21:25])),
+#         y = c(test8$fit[21:25] - 2*test8$se.fit[21:25], 
+#               rev(test8$fit[21:25] + 2*test8$se.fit[21:25])), col = adjustcolor('black', alpha.f=0.10), border = NA)
+# polygon(x = c(test8$Cultch[26:30], rev(test8$Cultch[26:30])),
+#         y = c(test8$fit[26:30] - 2*test8$se.fit[26:30], 
+#               rev(test8$fit[26:30] + 2*test8$se.fit[26:30])), col = adjustcolor('red', alpha.f=0.10), border = NA)
+# legend("topleft", legend = c("Winter", "Summer"), col = c("black", "red"), lty=1, lwd=2)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], pch = 16)
+# points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
+# title("NFWF Hotel Bar")
 
 
 #plot for period 9
@@ -709,40 +709,51 @@ points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Winter"], d5
 points(d5$Cultch[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], d5$LiveSpat[d5$StationName == "NFWF Hotel Bar" & d5$season == "Summer"], pch = 16, col = 'red')
 title("NFWF Hotel Bar")
 
+###################################
+#now take mean TotalWt and include in new GLMs
+###################################
 
-#now sum TotalWt and include that
-
-
-sum_wt=aggregate(TotalWt~StationName+StationNumber+Cultch+Period+season,data=d3,sum)
-names(sum_wt)[6]<-c("Sum_weight")
+mean_wt=aggregate(TotalWt~StationName+StationNumber+Cultch+Period+season,data=d3,mean)
+names(mean_wt)[6]<-c("Mean_weight")
 
 
 
 #or use the mean b/c the offset is applied to the counts, so that's why we use sum
 #but offset not applied to weights
 
-mean_wt=aggregate(TotalWt~StationName+StationNumber+Cultch+Period+season,data=d3,mean)
-#names(mean_wt)[7]<-c("Mean_weight")
+# mean_wt=aggregate(TotalWt~StationName+StationNumber+Cultch+Period+season,data=d3,mean)
+# names(mean_wt)[6]<-c("Mean_weight")
 
 #merge live & tran_length total data frame
-d6=merge(d5,sum_wt, by=c("StationName","StationNumber","Cultch","Period", "season"))
-d7=merge(d5,mean_wt, by=c("StationName","StationNumber","Cultch","Period", "season"))
+d6=merge(d5,mean_wt, by=c("StationName","StationNumber","Cultch","Period", "season"))
 
-as.integer(d7$Mean_weight)
+
+as.integer(d6$Mean_weight)
 
 #fit basic NB GLM
-m1.1 <- glm.nb(LiveSpat ~ Period + offset(log(Num_quads)), data = d7) 
+m1.1 <- glm.nb(LiveSpat ~ Period + offset(log(Num_quads)), data = d7)
+m1.2 <- glm.nb(LiveSpat ~ Mean_weight + Period+ offset(log(Num_quads)), data = d7) 
 m2.1 <- glm.nb(LiveSpat ~ Period + StationName + offset(log(Num_quads)), data = d7) 
 m3.1 <- glm.nb(LiveSpat ~ Period * StationName + offset(log(Num_quads)), data = d7) 
-m4.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + offset(log(Num_quads)), data = d7) 
-m5.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + Period + offset(log(Num_quads)), data = d7) 
-m6.1 <- glm.nb(LiveSpat ~ Cultch +TotalWt + Period + StationName + offset(log(Num_quads)), data = d7) 
-m7.1 <- glm.nb(LiveSpat ~ Cultch + TotalWt + Period + StationName + season + offset(log(Num_quads)), data = d7) 
+m4.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + offset(log(Num_quads)), data = d7) 
+m5.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + Period + offset(log(Num_quads)), data = d7) 
+m6.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + Period + StationName + offset(log(Num_quads)), data = d7) 
+m7.1 <- glm.nb(LiveSpat ~ Cultch + Mean_weight + Period + StationName + season + offset(log(Num_quads)), data = d7) 
 
 
-cand.set = list(m1.1,m2.1,m3.1,m5.1,m6.1,m7.1)
-modnames = c("year", "year + station", "year * station", "Cultch + TotalWt + year","Cultch + TotalWt + year+ Station", "Cultch + TotalWt + year+ Station+season")
+cand.set = list(m1.1,m1.2,m3.1,m4.1,m5.1,m6.1,m7.1)
+modnames = c("year", "year + station", "year * station","Cultch+MeanWt", "Cultch + MeanWt + year","Cultch + MeanWt + year+ Station", "Cultch + MeanWt + year+ Station+season")
 aictab(cand.set, modnames, second.ord = FALSE) #model selection table with AIC
 
 summary(m7.1)
 
+names (d7)
+
+#plot
+f6<-ggplot(d7, aes(x=Cultch, y= Mean_weight, color=StationName)) +
+  geom_point(size=3.5, alpha =1) +
+  ggtitle("Mean weight material from quadrats and Cultch density") +
+  xlab("Cultch") +
+  ylab("Mean weight from quadrat") +
+  facet_wrap(~Period)
+f6
