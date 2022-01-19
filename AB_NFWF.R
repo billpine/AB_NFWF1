@@ -243,9 +243,6 @@ ggplot(d3, aes(Period, LiveSpat)) +
 
 #now total wt
 
-#remove -999 in total weight
-d3.1 <- d3[d3$TotalWt > -1,]
-
 
 ggplot(d3.1, aes(Period, TotalWt)) +
   geom_point() +
