@@ -69,11 +69,12 @@ f1<-ggplot(d3, aes(Cultch, LiveSpat, color=StationName)) +
   ggtitle("Live Spat by Cultch") +
   xlab("Cultch") +
   ylab("Live Spat") +
-  stat_summary(fun.data = "mean_cl_boot",colour = "gold", size = 0.5)
+  stat_summary(fun = mean, geom = "point", size=1.5, aes(group= StationName), color="gold") +
+  stat_summary(fun.data = "mean_cl_boot",aes(group= StationName), size = 1.5, geom = "errorbar", width = 0.5, color="gold")
 
 f1
 
-
+#work on this  more https://stackoverflow.com/questions/17414565/interpretation-of-stat-summary-mean-cl-boot-at-ggplot2
 
 ###
 f2<-ggplot(d3, aes(Cultch, LiveSpat, color=StationName)) +
@@ -82,7 +83,10 @@ f2<-ggplot(d3, aes(Cultch, LiveSpat, color=StationName)) +
   xlab("Cultch") +
   ylab("Live Spat") +
   facet_wrap(~Year) +
-  stat_summary(fun.data = "mean_cl_boot",colour = "gold", size = 0.5)
+  stat_summary(fun = mean, geom = "point", size=1.5, aes(group= StationName), color="gold") 
+#+
+#  stat_summary(fun.data = "mean_cl_boot",aes(group= StationName), size = 1.5, geom = "errorbar", width = 0.5, color="gold")
+  
 
 f2
 
@@ -170,10 +174,6 @@ sumstats = function(x){
     U95BS= quantile(bstrap,.975))
 }
 
-
-
-
-
 a<-round(sumstats(d3$LiveSpat[d3$StationName == "NFWF Hotel Bar" & d3$Period == "2" ]),2)
 write.table(a, file = "hotel_p2.txt", row.names = TRUE,
             col.names = TRUE,sep = ",")
@@ -254,14 +254,14 @@ ggplot(d3.1, aes(Period, TotalWt)) +
 
 
 
-#now make another plot with the bootstrap mean and CI
-ggplot(report_table, aes(Period, mean)) +
-  geom_point() +
-  geom_errorbar(aes(ymin = lwr, ymax = upr)) +
-  ggtitle(StationName) +
-  xlab("Period") +
-  ylab("Live Spat") +
-  facet_wrap(~StationName)
+# #now make another plot with the bootstrap mean and CI
+# ggplot(report_table, aes(Period, mean)) +
+#   geom_point() +
+#   geom_errorbar(aes(ymin = lwr, ymax = upr)) +
+#   ggtitle(StationName) +
+#   xlab("Period") +
+#   ylab("Live Spat") +
+#   facet_wrap(~StationName)
 
 
 #########
@@ -287,12 +287,12 @@ names(d5)
 count_drills = aggregate(Drills~StationName+StationNumber+Cultch+Period+season,data=d3,mean)
 d5 = merge(d5, count_drills, by=c("StationName", "StationNumber", "Cultch", "Period", "season"), all.x=TRUE)
 
-#summary table thinking about dispersion
-#by station and cultch density
-summarise_live<-d5%>%
-  group_by(StationName,Cultch,Period)%>%
-  summarise(mean=mean(LiveSpat,na.rm=TRUE),
-            var=var(LiveSpat, na.rm=TRUE))
+# #summary table thinking about dispersion
+# #by station and cultch density
+# summarise_live<-d5%>%
+#   group_by(StationName,Cultch,Period)%>%
+#   summarise(mean=mean(LiveSpat,na.rm=TRUE),
+#             var=var(LiveSpat, na.rm=TRUE))
 
 
 #plot
