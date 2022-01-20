@@ -731,14 +731,14 @@ d6=merge(d5,mean_wt, by=c("StationName","StationNumber","Cultch","Period", "seas
 as.integer(d6$Mean_weight)
 
 #fit basic NB GLM
-m1.1 <- glm.nb(LiveSpat ~ Period + offset(log(Num_quads)), data = d7)
-m1.2 <- glm.nb(LiveSpat ~ Mean_weight + Period+ offset(log(Num_quads)), data = d7) 
-m2.1 <- glm.nb(LiveSpat ~ Period + StationName + offset(log(Num_quads)), data = d7) 
-m3.1 <- glm.nb(LiveSpat ~ Period * StationName + offset(log(Num_quads)), data = d7) 
-m4.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + offset(log(Num_quads)), data = d7) 
-m5.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + Period + offset(log(Num_quads)), data = d7) 
-m6.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + Period + StationName + offset(log(Num_quads)), data = d7) 
-m7.1 <- glm.nb(LiveSpat ~ Cultch + Mean_weight + Period + StationName + season + offset(log(Num_quads)), data = d7) 
+m1.1 <- glm.nb(LiveSpat ~ Period + offset(log(Num_quads)), data = d6)
+m1.2 <- glm.nb(LiveSpat ~ Mean_weight + Period+ offset(log(Num_quads)), data = d6) 
+m2.1 <- glm.nb(LiveSpat ~ Period + StationName + offset(log(Num_quads)), data = d6) 
+m3.1 <- glm.nb(LiveSpat ~ Period * StationName + offset(log(Num_quads)), data = d6) 
+m4.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + offset(log(Num_quads)), data = d6) 
+m5.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + Period + offset(log(Num_quads)), data = d6) 
+m6.1 <- glm.nb(LiveSpat ~ Cultch +Mean_weight + Period + StationName + offset(log(Num_quads)), data = d6) 
+m7.1 <- glm.nb(LiveSpat ~ Cultch + Mean_weight + Period + StationName + season + offset(log(Num_quads)), data = d6) 
 
 
 cand.set = list(m1.1,m1.2,m3.1,m4.1,m5.1,m6.1,m7.1)
@@ -750,10 +750,20 @@ summary(m7.1)
 names (d7)
 
 #plot
-f6<-ggplot(d7, aes(x=Cultch, y= Mean_weight, color=StationName)) +
+f6<-ggplot(d6, aes(x=Cultch, y= Mean_weight, color=StationName)) +
   geom_point(size=3.5, alpha =1) +
   ggtitle("Mean weight material from quadrats and Cultch density") +
   xlab("Cultch") +
   ylab("Mean weight from quadrat") +
   facet_wrap(~Period)
 f6
+
+#plot
+f7<-ggplot(d6, aes(x=Mean_weight, y= LiveSpat, color=StationName)) +
+  geom_point(size=3.5, alpha =1) +
+  ggtitle("Live Spat and Mean Cultch Biomass") +
+  ylim(0,30000)+
+  xlab("Mean weight") +
+  ylab("Live oyster spat") +
+  facet_wrap(~Period)
+f7
