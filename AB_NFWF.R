@@ -156,7 +156,7 @@ write.table(period, file = "period_yr_mnth_station.txt", row.names = FALSE,
 
 options(scipen = 2)
 sumstats = function(x){ 
-  y=x
+  y=na.omit(x)
   bstrap <- c()
   for (i in 1:1000){
     bstrap <- c(bstrap, mean(sample(y,(length(y)),replace=T), na.rm = T))}
