@@ -143,6 +143,12 @@ d3$season[d3$Period == 1 | d3$Period == 3 | d3$Period == 5 | d3$Period == 7 | d3
 
 d3$season
 
+#now write this data file to the DEP folder where you are 
+#going to merge with the two DEP datasets
+
+write.table(d3, file = "~/GitHub/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
+
+
 period <- d3 %>%
   dplyr::group_by(Period,Year, Month, StationName) %>%
   dplyr::summarise(count = n()) %>%
