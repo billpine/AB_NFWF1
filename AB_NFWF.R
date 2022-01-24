@@ -56,6 +56,12 @@ d3 <- d3 %>%
          Month = month(d3$Date),
          Day = day(d3$Date))
 
+#now write this data file to the DEP folder where you are 
+#going to merge with the two DEP datasets
+
+write.table(d3, file = "~/GitHub/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
+
+
 
 #some simple plots
 
