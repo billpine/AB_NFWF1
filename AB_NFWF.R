@@ -108,8 +108,8 @@ names(month) <- c("Year", "Month", "Station Name",
                   "Number Quadrats")
 
 #just writing the table with number of quadrats by year, month, station to folder
-write.table(month, file = "yr_mnth_station.txt", row.names = FALSE,
-            col.names = TRUE,sep = ",")
+#write.table(month, file = "yr_mnth_station.txt", row.names = FALSE,
+#            col.names = TRUE,sep = ",")
 
 
 #let's create periods of time as we done in Lone Cabbage and just
@@ -157,8 +157,8 @@ names(period) <- c("Period", "Year","Month", "Station Name",
                   "Number Quadrats")
 
 #just writing the table with number of quadrats by year, month, station to folder
-write.table(period, file = "period_yr_mnth_station.txt", row.names = FALSE,
-            col.names = TRUE,sep = ",")
+#write.table(period, file = "period_yr_mnth_station.txt", row.names = FALSE,
+#            col.names = TRUE,sep = ",")
 
 ##We will mostly work with period as the unit of time
 ##This combines some of the months obviously
@@ -308,7 +308,7 @@ d5 = merge(d5, count_drills, by=c("StationName", "StationNumber", "Cultch", "Per
 
 
 #plot
-ggplot(d5, aes(x=Cultch, y= LiveSpat, color=StationName)) +
+jim1<-ggplot(d5, aes(x=Cultch, y= LiveSpat, color=StationName)) +
   geom_point(size=3.5, alpha =1) +
   ggtitle("Live Spat by Station") +
   xlab("Cultch") +
@@ -338,6 +338,18 @@ m9 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + Drills + offset
 temp <- subset(d5, d5$Period > 2)
 m_temp <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + offset(log(Num_quads)), data = temp)
 summary(m_temp)
+
+#plot
+jim2<-ggplot(temp, aes(x=Cultch, y= LiveSpat, color=StationName)) +
+  geom_point(size=3.5, alpha =1) +
+  ggtitle("Live Spat by Station") +
+  xlab("Cultch") +
+  ylab("Live Spat") +
+  facet_wrap(~Period)
+
+
+plot_grid(jim1,jim2)
+
 #very little difference, guess it doesn't really matter - prob b/c just period 2 is crazy number all the rest are low
 
 cand.set = list(m1,m2,m3,m4,m5,m6,m7,m8,m9)
