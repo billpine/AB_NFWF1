@@ -59,7 +59,7 @@ d3 <- d3 %>%
 #now write this data file to the DEP folder where you are 
 #going to merge with the two DEP datasets
 
-write.table(d3, file = "~/GitHub/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
+#write.table(d3, file = "~/Git/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
 
 
 
