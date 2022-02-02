@@ -69,6 +69,17 @@ d2$Drills[d2$Drills < -1] <- NA
 d2$LiveOysters[d2$LiveOysters < -1] <- NA
 
 
+#from Matt Davis To calculate the number of spat I 
+#bp question
+#should then sum the LiveSpat and Live Oysters column 
+#and then use the proportion of oysters < 25-mm from your 
+#size information to convert the 
+#sum of (LiveSpat + LiveOysters) to an estimated number of 
+#spat?
+#Matt's answer That’s correct.
+
+d2$TotalOysters <-(d2$LiveOysters + d2$LiveSpat)
+
 str(d2)
 
 names(d2)
@@ -76,7 +87,7 @@ names(d2)
 #subset the columns to the ones you want to work with
 d3 <- d2 %>% 
   dplyr::select(Survey, Date, StationName, StationNumber, Cultch, 
-                Quadrat, TotalVol, TotalWt, LiveSpat, Drills)
+                Quadrat, TotalVol, TotalWt, LiveSpat, TotalOysters, Drills)
 
 #just extra year, month, day from the single date column
 
@@ -143,11 +154,9 @@ names(period) <- c("Period", "Year","Month", "Station Name",
 ##
 #now add spat prop from proportion calculator script
 
-d2 <- d1
-d2$LiveSpat[d2$LiveSpat < -1] <- NA
 
 d4<-d3
-d4Spatprop <-0.99
+d4$Spatprop <-0.99
 d4$Spatprop[d4$Period ==2] <-0.79
 d4$Spatprop[d4$Period ==3] <-0.37
 d4$Spatprop[d4$Period ==4] <-0.88
@@ -157,13 +166,10 @@ d4$Spatprop[d4$Period ==7] <-0.99
 d4$Spatprop[d4$Period ==8] <-0.999
 d4$Spatprop[d4$Period ==9] <-0.999
 
-
-
-
-
-
-
-
+#now multiply these proportions * the TotalOysters
+#round it so there are no fractions of oysters
+#and convert to integer
+d4$TotalSpat <-as.integer(round((d4$TotalOysters * d4$Spatprop),0))
 
 
 # ###################
@@ -205,20 +211,20 @@ d4$Spatprop[d4$Period ==9] <-0.999
 ##################
 
 #by period & station
-summary1<-d3%>%
+summary1<-d4%>%
   group_by(Period,StationName)%>%
-  summarise(mean=mean(LiveSpat,na.rm=TRUE),
-            std_dev=sd(LiveSpat, na.rm=TRUE))
+  summarise(mean=mean(TotalSpat,na.rm=TRUE),
+            std_dev=sd(TotalSpat, na.rm=TRUE))
 
 #add bootstrap mean and 95% CI to plot
 
-ggplot(d3, aes(Period, LiveSpat)) +
-  geom_point() +
-  ggtitle("Live Spat by Period") +
+ggplot(d4, aes(Period, TotalSpat)) +
+  geom_point(na.rm=TRUE) +
+  ggtitle("Total Spat by Period") +
   xlab("Period") +
-  ylab("Live Spat") +
+  ylab("TotalSpat") +
   facet_wrap(~StationName) +
-  stat_summary(fun.data = "mean_cl_boot",colour = "red", size = 0.6)
+  stat_summary(fun.data = "mean_cl_boot",colour = "red", size = 0.6,na.rm=TRUE)
 
 # #now total wt
 # 
@@ -241,27 +247,27 @@ ggplot(d3, aes(Period, LiveSpat)) +
 
 
 #########
-live <- d3 %>%
+live <- d4 %>%
   group_by(StationName, Period) %>%
   summarise(sum = n())
 live
 
 #sum live counts for each transect
-count_live=aggregate(LiveSpat~StationName+StationNumber+Cultch+Period+season,data=d3,sum)
+count_live=aggregate(TotalSpat~StationName+StationNumber+Cultch+Period+Season,data=d4,sum)
 
 #count number quads by doing the length of transect, then rename
-count_quads=aggregate(LiveSpat~StationName+StationNumber+Cultch+Period+season,data=d3,length)
-count_quads <- dplyr::rename(count_quads,StationName=StationName,StationNumber=StationNumber, Cultch=Cultch, Num_quads=LiveSpat, Period=Period,season=season)
+count_quads=aggregate(TotalSpat~StationName+StationNumber+Cultch+Period+Season,data=d4,length)
+count_quads <- dplyr::rename(count_quads,StationName=StationName,StationNumber=StationNumber, Cultch=Cultch, Num_quads=TotalSpat, Period=Period,Season=Season)
 
 
 #merge live count total data frame with the tran_length total data frame
-d5=merge(count_live,count_quads,by=c("StationName","StationNumber","Cultch","Period", "season"))
+d5=merge(count_live,count_quads,by=c("StationName","StationNumber","Cultch","Period", "Season"))
 
 names(d5)
 
-#now add drills to dataset - took the mean - does that make sense or should it be sum?
-count_drills = aggregate(Drills~StationName+StationNumber+Cultch+Period+season,data=d3,mean)
-d5 = merge(d5, count_drills, by=c("StationName", "StationNumber", "Cultch", "Period", "season"), all.x=TRUE)
+#now add drills to dataset - took the mean - should it be sum?
+count_drills = aggregate(Drills~StationName+StationNumber+Cultch+Period+Season,data=d3,mean)
+d5 = merge(d5, count_drills, by=c("StationName", "StationNumber", "Cultch", "Period", "Season"), all.x=TRUE)
 
 # #summary table thinking about dispersion
 # #by station and cultch density
@@ -272,31 +278,34 @@ d5 = merge(d5, count_drills, by=c("StationName", "StationNumber", "Cultch", "Per
 
 
 #plot
-jim1<-ggplot(d5, aes(x=Cultch, y= LiveSpat, color=StationName)) +
+jim1<-ggplot(d5, aes(x=Cultch, y= TotalSpat, color=StationName)) +
   geom_point(size=3.5, alpha =1) +
-  ggtitle("Live Spat by Station") +
+  ggtitle("Total Spat by Station") +
   xlab("Cultch") +
-  ylab("Live Spat") +
+  ylab("Total Spat") +
   facet_wrap(~Period)
 
-
-#convert counts of spat to integers
-d5$LiveSpat <- as.integer(d5$LiveSpat)
-str(d5)
+#
 
 d5$StationName <- as.factor(d5$StationName)
 d5$season <- as.factor(d5$season)
 #fit basic NB GLM
-m1 <- glm.nb(LiveSpat ~ Period + offset(log(Num_quads)), data = d5) 
-m2 <- glm.nb(LiveSpat ~ Period + StationName + offset(log(Num_quads)), data = d5) 
-m3 <- glm.nb(LiveSpat ~ Period * StationName + offset(log(Num_quads)), data = d5) 
-m4 <- glm.nb(LiveSpat ~ Cultch + offset(log(Num_quads)), data = d5) 
-m5 <- glm.nb(LiveSpat ~ Cultch + Period + offset(log(Num_quads)), data = d5) 
-m6 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + offset(log(Num_quads)), data = d5) 
-m7 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + offset(log(Num_quads)), data = d5) 
-m8 <- glm.nb(LiveSpat ~ Drills + offset(log(Num_quads)), data = d5)
-m9 <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + Drills + offset(log(Num_quads)), data = d5) 
-#model with drills (m9) is quite a bit better then m7 (delta AIC of 830)
+m1 <- glm.nb(TotalSpat ~ Period + offset(log(Num_quads)), data = d5) 
+m2 <- glm.nb(TotalSpat ~ Period + StationName + offset(log(Num_quads)), data = d5) 
+m3 <- glm.nb(TotalSpat ~ Period * StationName + offset(log(Num_quads)), data = d5) 
+m4 <- glm.nb(TotalSpat ~ Cultch + offset(log(Num_quads)), data = d5) 
+m5 <- glm.nb(TotalSpat ~ Cultch + Period + offset(log(Num_quads)), data = d5) 
+m6 <- glm.nb(TotalSpat ~ Cultch + Period + StationName + offset(log(Num_quads)), data = d5) 
+m7 <- glm.nb(TotalSpat ~ Cultch + Period + StationName + Season + offset(log(Num_quads)), data = d5) 
+m8 <- glm.nb(TotalSpat ~ Drills + offset(log(Num_quads)), data = d5)
+m9 <- glm.nb(TotalSpat ~ Cultch + Period + StationName + Season + Drills + offset(log(Num_quads)), data = d5) 
+#model with drills (m9) is Lower then m7 (delta AIC of 821)
+
+cand.set = list(m1,m2,m3,m4,m5,m6,m7,m8,m9)
+modnames = c("period", "period + station", "period * station", "cultch", "cultch + period", "cultch+period+station", "cultch+period+station+season", "drills", "cultch+period+station+season+drills")
+aictab(cand.set, modnames, second.ord = FALSE) #model selection table with AIC
+
+summary(m7)
 
 #try a model without period 2 just to see
 temp <- subset(d5, d5$Period > 2)
@@ -304,9 +313,9 @@ m_temp <- glm.nb(LiveSpat ~ Cultch + Period + StationName + season + offset(log(
 summary(m_temp)
 
 #plot
-jim2<-ggplot(temp, aes(x=Cultch, y= LiveSpat, color=StationName)) +
+jim2<-ggplot(temp, aes(x=Cultch, y= TotalSpat, color=StationName)) +
   geom_point(size=3.5, alpha =1) +
-  ggtitle("Live Spat by Station") +
+  ggtitle("Total Spat by Station") +
   xlab("Cultch") +
   ylab("Live Spat") +
   facet_wrap(~Period)
@@ -316,11 +325,7 @@ plot_grid(jim1,jim2)
 
 #very little difference, guess it doesn't really matter - prob b/c just period 2 is crazy number all the rest are low
 
-cand.set = list(m1,m2,m3,m4,m5,m6,m7,m8,m9)
-modnames = c("period", "period + station", "period * station", "cultch", "cultch + period", "cultch+period+station", "cultch+period+station+season", "drills", "cultch+period+station+season+drills")
-aictab(cand.set, modnames, second.ord = FALSE) #model selection table with AIC
 
-summary(m7)
 
 ##use m7 to predict and create plots
 newdata2 <- data.frame(Cultch = rep(c(0, 100, 200, 300, 400),each=1,times=6), season = rep(c("Winter", "Summer"), each = 5, times = 3), StationName = rep(c("NFWF Bulkhead", "NFWF Dry Bar", "NFWF Hotel Bar"), each = 10, times = 1),
