@@ -149,6 +149,9 @@ d4$Spatprop[d4$Period ==9] <-0.999
 d4$TotalSpat <-as.integer(round((d4$TotalOysters * d4$Spatprop),0))
 
 
+#write.table(d4, file = "~/Git/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
+
+
 # ###################
 # #from oyster weekly report
 # 
