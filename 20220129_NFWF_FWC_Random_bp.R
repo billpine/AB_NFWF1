@@ -800,15 +800,20 @@ rcount_live=aggregate(TotalSpat~StationName+StationNumber+Quadrat+Cultch+Period+
 #merge live count total data frame with the tran_length total data frame
 r5=merge(rcount_live,count_quads,by=c("StationName","StationNumber","Cultch","Period", "Season"))
 
+
 library(lme4) #mixed effect models
 library(MASS) #negative binomial models
 
+#make quadrat factor for random effect
+r5$Quadrat<-as.factor(r5$Quadrat)
+
+
 #no offset, quadrat as random
-r0.0 <- glmer.nb(TotalSpat ~ Period + (1|Quadrat), data = r5) #no converge
-r0.1 <- glmer.nb(TotalSpat ~ Cultch + (1|Quadrat), data = r5) #no converge
-r0.2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|Quadrat), data = r5) #converge
-r0.3 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + (1|Quadrat) + offset(log(Num_quads)), data = r5) # no converge
-r0.4 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + Season + (1|Quadrat), data = r5) #no converge
+r0.0 <- glmer.nb(TotalSpat ~ Period + (1|StationName), data = r5) #no converge
+r0.1 <- glmer.nb(TotalSpat ~ Cultch + (1|StationName), data = r5) #no converge
+r0.2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|StationName), data = r5) #converge
+r0.3 <- glmer.nb(TotalSpat ~ Cultch + Period + Season + (1|StationName), data = r5) # no converge
+
 
 
 
@@ -820,13 +825,6 @@ r1 <- glmer.nb(TotalSpat ~ Cultch + (1|Quadrat) + offset(log(Num_quads)), data =
 r2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|Quadrat) + offset(log(Num_quads)), data = r5) #converge
 r3 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + (1|Quadrat) + offset(log(Num_quads)), data = r5) # no converge
 r4 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + Season + (1|Quadrat) + offset(log(Num_quads)), data = r5) #no converge
-
-r0 <- glmer.nb(TotalSpat ~ Period + (1|Quadrat), data = r5) #no converge
-r1 <- glmer.nb(TotalSpat ~ Cultch + (1|Quadrat), data = r5) #no converge
-r2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|Quadrat), data = r5) #converge
-r3 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + (1|Quadrat) + offset(log(Num_quads)), data = r5) # no converge
-r4 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + Season + (1|Quadrat), data = r5) #no converge
-
 
 #no idea on these convergence issues
 
@@ -840,7 +838,8 @@ install.packages("glmmADMB",
 library(glmmADMB)
 
 fit_zipoiss<- glmmadmb(TotalSpat ~ Cultch + 
-                         offset(log(Num_quads)+(1|Quadrat), 
+                         #offset(log(Num_quads)
+                         +(1|Quadrat), 
                           data = r5,
                           zeroInflation=TRUE,
-                          family="poisson"))
+                          family="poisson")
