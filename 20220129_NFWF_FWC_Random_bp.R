@@ -805,10 +805,10 @@ library(lme4) #mixed effect models
 library(MASS) #negative binomial models
 
 #make quadrat factor for random effect
-r5$Quadrat<-as.factor(r5$Quadrat)
+r5$StationName<-as.factor(r5$StationName)
 
 
-#no offset, quadrat as random
+#no offset, station name as random
 r0.0 <- glmer.nb(TotalSpat ~ Period + (1|StationName), data = r5) #no converge
 r0.1 <- glmer.nb(TotalSpat ~ Cultch + (1|StationName), data = r5) #no converge
 r0.2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|StationName), data = r5) #converge
@@ -820,11 +820,7 @@ r0.3 <- glmer.nb(TotalSpat ~ Cultch + Period + Season + (1|StationName), data = 
 #tran_length as an offset and quadrat a random effect
 
 
-r0 <- glmer.nb(TotalSpat ~ Period + (1|Quadrat) + offset(log(Num_quads)), data = r5) #no converge
-r1 <- glmer.nb(TotalSpat ~ Cultch + (1|Quadrat) + offset(log(Num_quads)), data = r5) #no converge
-r2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|Quadrat) + offset(log(Num_quads)), data = r5) #converge
-r3 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + (1|Quadrat) + offset(log(Num_quads)), data = r5) # no converge
-r4 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + Season + (1|Quadrat) + offset(log(Num_quads)), data = r5) #no converge
+#r0 <- glmer.nb(TotalSpat ~ Period + (1|StationName) + offset(log(Num_quads)), data = r5) #no converge
 
 #no idea on these convergence issues
 
@@ -839,7 +835,7 @@ library(glmmADMB)
 
 fit_zipoiss<- glmmadmb(TotalSpat ~ Cultch + 
                          #offset(log(Num_quads)
-                         +(1|Quadrat), 
+                         +(1|StationName), 
                           data = r5,
                           zeroInflation=TRUE,
                           family="poisson")
