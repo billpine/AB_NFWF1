@@ -24,30 +24,7 @@ library(ggeffects)
 library(cowplot)
 
 #################################################
-#########calculate the proportion that are spat
-#################################################
-h1 <- read_excel("NFWF_RAW_UF_copy.xlsx", sheet=4)
-names(h1)
 
-min(h1$SH)
-max(h1$SH)
-
-
-#switch -999 to NA instead of removing
-h2 <- h1
-
-h2$SH[h2$SH < -1] <- NA
-
-hist(h2$SH)
-
-num_spat<-length(h2$SH[h2$SH<26])
-num_total<-length(h2$SH)
-
-proportion_spat<-num_spat/num_total
-
-#about 79% are < 26 mm
-#####################
-##Moving on
 #####################
 
 d1 <- read_excel("NFWF_RAW_UF_copy.xlsx", sheet=3)
@@ -89,7 +66,7 @@ d3 <- d2 %>%
   dplyr::select(Survey, Date, StationName, StationNumber, Cultch, 
                 Quadrat, TotalVol, TotalWt, LiveSpat, TotalOysters, Drills)
 
-#just extra year, month, day from the single date column
+#just year, month, day from the single date column
 
 d3 <- d3 %>%
   mutate(Year = year(d3$Date),
@@ -773,35 +750,97 @@ f7
 par(mfrow=c(1,1))
 plot(d3$TotalWt~d3$Period)
 
-m3.1 <- glm(TotalWt ~ Period, data = d3)
-summary(m3.1)
+w1 <- lm(TotalWt ~ Period, data = d3)
+summary(w1)
+
+abline(w1)
+
+#yes total weight declines over time but model is terrible, 
+#should be exponential decay or maybe just delete the zero cultch
+#but zero cultch could still accumulate weight, so maybe not
+# delete zero cultch
+
+period_pred<-seq(min(d3$Period),max(d3$Period),length=200)
+
+nwx1=data.frame(Period=period_pred) #make sequence data a data frame
+
+prd=predict(w1,newdata=nwx1,interval="confidence",
+            level = 0.95)
 
 plot(d3$TotalWt~d3$Period)
-#abline(m3.1)
+abline(w1, col="lightblue")
+
+matlines(period_pred, prd[,2:3], col = "blue", lty=2)
+
+#now convert cultch to factor to see if 
+#all the cultch levels decline over time
+d3.1<-d3
+d3.1$Cultch <- as.factor(d3.1$Cultch)
+
+w1.1 <- glm(TotalWt ~ Period*Cultch, data = d3.1)
+summary(w1.1)
+#and yes it declines over time for all densities
+#but model still terrible fit
+
+#we can return later to modeling cultch declines and fit better models
+
+############
+############
+##Random effects
+############
+
+#need to go back to d4 so we have quadrat and treat the quadrat as a random effect
+
+#sum live counts for each quadrat just to check
+#this isn't really necessary as the counts are by transect,
+#but it makes it easier to merge with number of quads
+rcount_live=aggregate(TotalSpat~StationName+StationNumber+Quadrat+Cultch+Period+Season,
+                      data=d4,sum)
+
+#merge live count total data frame with the tran_length total data frame
+r5=merge(rcount_live,count_quads,by=c("StationName","StationNumber","Cultch","Period", "Season"))
+
+library(lme4) #mixed effect models
+library(MASS) #negative binomial models
+
+#no offset, quadrat as random
+r0.0 <- glmer.nb(TotalSpat ~ Period + (1|Quadrat), data = r5) #no converge
+r0.1 <- glmer.nb(TotalSpat ~ Cultch + (1|Quadrat), data = r5) #no converge
+r0.2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|Quadrat), data = r5) #converge
+r0.3 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + (1|Quadrat) + offset(log(Num_quads)), data = r5) # no converge
+r0.4 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + Season + (1|Quadrat), data = r5) #no converge
 
 
-x1<-seq(min(d3$Period),max(d3$Period),length=200)
-y1 <- predict.lm(m3.1,newdata = list(Period = x1))
 
-conf_interval <- predict(m3.1, newdata=data.frame(x=x1), interval="confidence",
-                       level = 0.95)
+#tran_length as an offset and quadrat a random effect
 
 
-plot(x, y, xlab="x", ylab="y", main="Regression")
-abline(lm.out, col="lightblue")
-matlines(newx, conf_interval[,2:3], col = "blue", lty=2)
+r0 <- glmer.nb(TotalSpat ~ Period + (1|Quadrat) + offset(log(Num_quads)), data = r5) #no converge
+r1 <- glmer.nb(TotalSpat ~ Cultch + (1|Quadrat) + offset(log(Num_quads)), data = r5) #no converge
+r2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|Quadrat) + offset(log(Num_quads)), data = r5) #converge
+r3 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + (1|Quadrat) + offset(log(Num_quads)), data = r5) # no converge
+r4 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + Season + (1|Quadrat) + offset(log(Num_quads)), data = r5) #no converge
+
+r0 <- glmer.nb(TotalSpat ~ Period + (1|Quadrat), data = r5) #no converge
+r1 <- glmer.nb(TotalSpat ~ Cultch + (1|Quadrat), data = r5) #no converge
+r2 <- glmer.nb(TotalSpat ~ Cultch + Period + (1|Quadrat), data = r5) #converge
+r3 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + (1|Quadrat) + offset(log(Num_quads)), data = r5) # no converge
+r4 <- glmer.nb(TotalSpat ~ Cultch + Period + StationName + Season + (1|Quadrat), data = r5) #no converge
 
 
+#no idea on these convergence issues
 
-plot(d3$TotalWt~d3$Period, xlab="Period", ylab="Total Weight")
-abline(m3.1, col="blue")
+#is it worth trying glmmADMB?
+install.packages("R2admb")
+install.packages("glmmADMB", 
+                 repos=c("http://glmmadmb.r-forge.r-project.org/repos",
+                         getOption("repos")),
+                 type="source")
 
-conf_interval <- predict(lm.out, newdata=data.frame(x=x1), interval="confidence",
-                         level = 0.95)
+library(glmmADMB)
 
-conf_interval <- predict(m3.1, newdata=data.frame(x=x1), interval="confidence",
-
-
-
-matlines(x1, conf_interval[,2:3], col = "blue", lty=2)
-
+fit_zipoiss<- glmmadmb(TotalSpat ~ Cultch + 
+                         offset(log(Num_quads)+(1|Quadrat), 
+                          data = r5,
+                          zeroInflation=TRUE,
+                          family="poisson"))
