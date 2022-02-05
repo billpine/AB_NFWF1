@@ -45,9 +45,9 @@ d2$TotalWt[d2$TotalWt < -1] <- NA
 d2$Drills[d2$Drills < -1] <- NA
 d2$LiveOysters[d2$LiveOysters < -1] <- NA
 
-
-#from Matt Davis To calculate the number of spat I 
+#from Matt Davis answer to
 #bp question
+#To calculate the number of spat I 
 #should then sum the LiveSpat and Live Oysters column 
 #and then use the proportion of oysters < 25-mm from your 
 #size information to convert the 
@@ -143,13 +143,35 @@ d4$Spatprop[d4$Period ==7] <-0.99
 d4$Spatprop[d4$Period ==8] <-0.999
 d4$Spatprop[d4$Period ==9] <-0.999
 
+d4$Seedprop <-0.99
+d4$Seedprop[d4$Period ==2] <-0.23
+d4$Seedprop[d4$Period ==3] <-0.61
+d4$Seedprop[d4$Period ==4] <-0.10
+d4$Seedprop[d4$Period ==5] <-0.19
+d4$Seedprop[d4$Period ==6] <-0.02
+d4$Seedprop[d4$Period ==7] <-0.07
+d4$Seedprop[d4$Period ==8] <-0.11
+d4$Seedprop[d4$Period ==9] <-0.03
+
+d4$Legalprop <-0.99
+d4$Legalprop[d4$Period ==2] <-0.02
+d4$Legalprop[d4$Period ==3] <-0.04
+d4$Legalprop[d4$Period ==4] <-0.03
+d4$Legalprop[d4$Period ==5] <-0.05
+d4$Legalprop[d4$Period ==6] <-0.02
+d4$Legalprop[d4$Period ==7] <-0.06
+d4$Legalprop[d4$Period ==8] <-0.11
+d4$Legalprop[d4$Period ==9] <-0.30
+
 #now multiply these proportions * the TotalOysters
 #round it so there are no fractions of oysters
 #and convert to integer
 d4$TotalSpat <-as.integer(round((d4$TotalOysters * d4$Spatprop),0))
+d4$TotalSeed <-as.integer(round((d4$TotalOysters * d4$Seedprop),0))
+d4$TotalLegal <-as.integer(round((d4$TotalOysters * d4$Legalprop),0))
 
 
-#write.table(d4, file = "~/Git/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
+write.table(d4, file = "~/Git/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
 
 
 # ###################
@@ -198,13 +220,31 @@ summary1<-d4%>%
 
 #add bootstrap mean and 95% CI to plot
 
-ggplot(d4, aes(Period, TotalSpat)) +
+tspat<-ggplot(d4, aes(Period, TotalSpat)) +
   geom_point(na.rm=TRUE) +
   ggtitle("Total Spat by Period") +
   xlab("Period") +
   ylab("TotalSpat") +
   facet_wrap(~StationName) +
   stat_summary(fun.data = "mean_cl_boot",colour = "red", size = 0.6,na.rm=TRUE)
+
+tseed<-ggplot(d4, aes(Period, TotalSeed)) +
+  geom_point(na.rm=TRUE) +
+  ggtitle("Total Seed by Period") +
+  xlab("Period") +
+  ylab("TotalSeed") +
+  facet_wrap(~StationName) +
+  stat_summary(fun.data = "mean_cl_boot",colour = "red", size = 0.6,na.rm=TRUE)
+
+tlegal<-ggplot(d4, aes(Period, TotalLegal)) +
+  geom_point(na.rm=TRUE) +
+  ggtitle("Total Legal by Period") +
+  xlab("Period") +
+  ylab("TotalLegal") +
+  facet_wrap(~StationName) +
+  stat_summary(fun.data = "mean_cl_boot",colour = "red", size = 0.6,na.rm=TRUE)
+
+plot_grid(tspat,tseed,tlegal,nocols=1)
 
 # #now total wt
 # 
@@ -234,6 +274,9 @@ live
 
 #sum live counts for each transect
 count_live=aggregate(TotalSpat~StationName+StationNumber+Cultch+Period+Season,data=d4,sum)
+count_live_seed=aggregate(TotalSeed~StationName+StationNumber+Cultch+Period+Season,data=d4,sum)
+count_live_legal=aggregate(TotalLegal~StationName+StationNumber+Cultch+Period+Season,data=d4,sum)
+
 
 #count number quads by doing the length of transect, then rename
 count_quads=aggregate(TotalSpat~StationName+StationNumber+Cultch+Period+Season,data=d4,length)
@@ -242,12 +285,16 @@ count_quads <- dplyr::rename(count_quads,StationName=StationName,StationNumber=S
 
 #merge live count total data frame with the tran_length total data frame
 d5=merge(count_live,count_quads,by=c("StationName","StationNumber","Cultch","Period", "Season"))
+d5.1=merge(d5,count_live_seed,by=c("StationName","StationNumber","Cultch","Period", "Season"))
+d5.2=merge(d5.1,count_live_legal,by=c("StationName","StationNumber","Cultch","Period", "Season"))
 
-names(d5)
 
 #now add drills to dataset - took the mean - should it be sum?
 count_drills = aggregate(Drills~StationName+StationNumber+Cultch+Period+Season,data=d3,mean)
-d5 = merge(d5, count_drills, by=c("StationName", "StationNumber", "Cultch", "Period", "Season"), all.x=TRUE)
+d5.3 = merge(d5.2, count_drills, by=c("StationName", "StationNumber", "Cultch", "Period", "Season"), all.x=TRUE)
+
+d5<-d5.3
+
 
 # #summary table thinking about dispersion
 # #by station and cultch density
