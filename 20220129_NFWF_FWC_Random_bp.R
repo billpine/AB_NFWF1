@@ -144,24 +144,24 @@ d4$Spatprop[d4$Period ==8] <-0.999
 d4$Spatprop[d4$Period ==9] <-0.999
 
 d4$Seedprop <-0.99
-d4$Seedprop[d4$Period ==2] <-0.23
-d4$Seedprop[d4$Period ==3] <-0.61
-d4$Seedprop[d4$Period ==4] <-0.10
-d4$Seedprop[d4$Period ==5] <-0.19
-d4$Seedprop[d4$Period ==6] <-0.02
-d4$Seedprop[d4$Period ==7] <-0.07
-d4$Seedprop[d4$Period ==8] <-0.11
-d4$Seedprop[d4$Period ==9] <-0.03
+d4$Seedprop[d4$Period ==2] <-0.21
+d4$Seedprop[d4$Period ==3] <-0.60
+d4$Seedprop[d4$Period ==4] <-0.09
+d4$Seedprop[d4$Period ==5] <-0.16
+d4$Seedprop[d4$Period ==6] <-0.005
+d4$Seedprop[d4$Period ==7] <-0.01
+d4$Seedprop[d4$Period ==8] <-0.00006
+d4$Seedprop[d4$Period ==9] <-0.01
 
 d4$Legalprop <-0.99
-d4$Legalprop[d4$Period ==2] <-0.02
-d4$Legalprop[d4$Period ==3] <-0.04
-d4$Legalprop[d4$Period ==4] <-0.03
-d4$Legalprop[d4$Period ==5] <-0.05
-d4$Legalprop[d4$Period ==6] <-0.02
-d4$Legalprop[d4$Period ==7] <-0.06
-d4$Legalprop[d4$Period ==8] <-0.11
-d4$Legalprop[d4$Period ==9] <-0.30
+d4$Legalprop[d4$Period ==2] <-0.0002
+d4$Legalprop[d4$Period ==3] <-0.0002
+d4$Legalprop[d4$Period ==4] <-0.0002
+d4$Legalprop[d4$Period ==5] <-0.03
+d4$Legalprop[d4$Period ==6] <-0.0002
+d4$Legalprop[d4$Period ==7] <-0.0007
+d4$Legalprop[d4$Period ==8] <-0
+d4$Legalprop[d4$Period ==9] <-0
 
 #now multiply these proportions * the TotalOysters
 #round it so there are no fractions of oysters
