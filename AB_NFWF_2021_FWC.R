@@ -1,4 +1,14 @@
+#This reads in the 2021 Apalach data from jim estes from two different tabs
+#one is the shell heights and the other are the counts
+#need to calculate the proportion of the different size categories and apply those proportions to the counts
+
+
 library(readxl)
+library(tidyverse)
+library(dplyr)
+library(reshape)
+library(ggplot2)
+library(lubridate)
 
 SH <- read_excel("AB_Survey_2021.xlsx",sheet = "SH", range = "A4:G4380")
 
@@ -11,12 +21,99 @@ names(SH)
 s2 <- SH
 str(s2)
 
-names(d4.1)[3] <- "Weight"
-names(d4.1)[4] <- "Legal"
-names(d4.1)[5] <- "Sublegal"
-names(d4.1)[6] <- "Spat"
+names(s2)
 
 
-d2$LiveSpat[d2$LiveSpat < -1] <- NA
-d2$TotalWt[d2$TotalWt < -1] <- NA
-d2$Drills[d2$Drills < -1] <- NA
+names(s2)[5] <- "StationName"
+names(s2)[6] <- "Quadrat"
+names(s2)[7] <- "SH"
+
+s2$SH[s2$SH == "Z"] <-NA
+
+
+
+
+###
+#add period
+
+s3 <- s2 %>%
+  mutate(Year = year(s2$Date),
+         Month = month(s2$Date),
+         Day = day(s2$Date))
+
+s3$Period <- NA
+firstyear <- 2015
+endyear <- max(s3$Year)
+
+years <- sort(rep(firstyear:endyear, times = 1, each = 2))
+
+for(i in unique(years)){
+  y <- i #year
+  p <- which(years == i) #period number - 2010 = 1 and 2, 2011 = 3 and 4, and so forth.
+  for(j in 1:nrow(s3)){
+    if(s3$Year[j] == y & s3$Month[j] > 3 & s3$Month[j] < 10) s3$Period[j] = p[1] #year i months 4-9
+    if(s3$Year[j] == y & s3$Month[j] > 9) s3$Period[j] = p[2] #year i months 10-12
+    if(s3$Year[j] == y+1 & s3$Month[j] < 4) s3$Period[j] = p[2] #year i+1 months 1-3
+  }
+}
+
+s3$Season <- "Winter"
+s3$Season[s3$Period == 1 | s3$Period == 3 | s3$Period == 5 | s3$Period == 7 | s3$Period == 9] <- "Summer"
+
+####
+
+names(s3)
+
+unique(s3$Period)
+
+num_spat<-length(s3$SH[s3$SH<26])
+num_total<-length(s3$SH)
+
+proportion_spat<-num_spat/num_total
+
+########
+####SPAT######
+p11 <- subset(s3, s3$Period == 11)
+num_spat_p11<-length(p11$SH[p11$SH<26])
+num_total_p11<-length(p11$SH)
+proportion_spat_p11<-num_spat_p11/num_total_p11
+#0.76 spat
+
+p12 <- subset(s3, s3$Period == 12)
+num_spat_p12<-length(p12$SH[p12$SH<26])
+num_total_p12<-length(p12$SH)
+proportion_spat_p12<-num_spat_p12/num_total_p12
+#0.52 spat
+
+p13 <- subset(s3, s3$Period == 13)
+num_spat_p13<-length(p13$SH[p13$SH<26])
+num_total_p13<-length(p13$SH)
+proportion_spat_p13<-num_spat_p13/num_total_p13
+#0.39 spat
+
+hist(d2$SH)
+
+###SEED
+
+num_seed_p11<-length(subset(s3$SH, s3$SH>=26 & s3$SH<76))
+num_total_p11<-length(p11$SH)
+proportion_seed_p11<-num_seed_p11/num_total_p11
+#0.19 seed
+
+num_seed_p12<-length(subset(p12$SH, p12$SH>=26 & p12$SH<76))
+num_total_p12<-length(p12$SH)
+proportion_seed_p12<-num_seed_p12/num_total_p12
+#0.41 seed
+
+num_seed_p13<-length(subset(p13$SH, p13$SH>=26 & p13$SH<76))
+num_total_p13<-length(p13$SH)
+proportion_seed_p13<-num_seed_p13/num_total_p13
+#0.49 seed
+
+####Legal######
+p13 <- subset(h3, h3$Period == 2)
+num_Legal_p2<-length(subset(p2$SH, p2$SH>=76))
+num_total_p2<-length(p2$SH)
+proportion_Legal_p2<-num_Legal_p2/num_total_p2
+#0.0002 Legal
+
