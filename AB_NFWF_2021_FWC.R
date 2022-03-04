@@ -12,9 +12,9 @@ library(lubridate)
 
 SH <- read_excel("AB_Survey_2021.xlsx",sheet = "SH", range = "A4:G4380")
 
-Counts <- read_excel("AB_Survey_2021.xlsx",sheet = "SH", range = "A4:K689")
+Counts <- read_excel("AB_Survey_2021.xlsx",sheet = "Counts", range = "A4:K689")
 
-#now start cleaning
+#now start cleaning SH first
 
 names(SH)
 
@@ -115,41 +115,115 @@ proportion_seed_p13<-num_seed_p13/num_total_p13
 ####Legal######
 num_Legal_p11<-length(subset(p11$SH, p11$SH>=76))
 num_total_p11<-length(p11$SH)
-proportion_Legal_p11<-num_Legal_p11/num_total_p11
+proportion_legal_p11<-num_Legal_p11/num_total_p11
 #0 Legal
 
 num_Legal_p12<-length(subset(p12$SH, p12$SH>=76))
 num_total_p12<-length(p12$SH)
-proportion_Legal_p12<-num_Legal_p12/num_total_p12
+proportion_legal_p12<-num_Legal_p12/num_total_p12
 #0.02 Legal
 
 num_Legal_p13<-length(subset(p13$SH, p13$SH>=76))
 num_total_p13<-length(p13$SH)
-proportion_Legal_p13<-num_Legal_p13/num_total_p13
+proportion_legal_p13<-num_Legal_p13/num_total_p13
 #0.04 Legal
+
+###now clean counts
+
+c1<-Counts
+
+names(c1)
+names(c1)[5] <- "StationName"
+names(c1)[7] <- "Quadrat_live"
+names(c1)[8] <- "Quadrat_dead"
+names(c1)[9] <- "Volume_L"
+names(c1)[10] <- "Weight_kg"
+names(c1)[11] <- "Number_drills"
+
+str(c1)
+
+unique(c1$Quadrat)
+
+
+###
+#add period
+
+c2 <-c1 %>%
+  mutate(Year = year(c2$Date),
+         Month = month(c2$Date),
+         Day = day(c2$Date))
+
+c2$Period <- NA
+firstyear <- 2015
+endyear <- max(c2$Year)
+
+years <- sort(rep(firstyear:endyear, times = 1, each = 2))
+
+for(i in unique(years)){
+  y <- i #year
+  p <- which(years == i) #period number - 2010 = 1 and 2, 2011 = 3 and 4, and so forth.
+  for(j in 1:nrow(c2)){
+    if(c2$Year[j] == y & c2$Month[j] > 3 & c2$Month[j] < 10) c2$Period[j] = p[1] #year i months 4-9
+    if(c2$Year[j] == y & c2$Month[j] > 9) c2$Period[j] = p[2] #year i months 10-12
+    if(c2$Year[j] == y+1 & c2$Month[j] < 4) c2$Period[j] = p[2] #year i+1 months 1-3
+  }
+}
+
+c2$Season <- "Winter"
+c2$Season[c2$Period == 1 | c2$Period == 3 | c2$Period == 5 | c2$Period == 7 | c2$Period == 9] <- "Summer"
+
+####
+
+names(s3)
+names(c2)
+
+
+#subset the columns to the ones you want to work with
+c3 <- c2 %>% 
+  dplyr::select("Survey","Site","Station","StationName","Quadrat"
+                ,"Quadrat_live","Quadrat_dead","Weight_kg",
+                "Number_drills","Month","Day","Year","Period","Season")
+
+unique(c3$Period)
+
+
+c3$Spatprop <-0.99
+c3$Spatprop[c3$Period ==11] <-proportion_spat_p11
+c3$Spatprop[c3$Period ==12] <-proportion_spat_p12
+c3$Spatprop[c3$Period ==13] <-proportion_spat_p13
+
+c3$Seedprop <-0.99
+c3$Seedprop[c3$Period ==11] <-proportion_seed_p11
+c3$Seedprop[c3$Period ==12] <-proportion_seed_p12
+c3$Seedprop[c3$Period ==13] <-proportion_seed_p13
+
+c3$Legalprop <-0.99
+c3$Legalprop[c3$Period ==11] <-proportion_legal_p11
+c3$Legalprop[c3$Period ==12] <-proportion_legal_p12
+c3$Legalprop[c3$Period ==13] <-proportion_legal_p13
 
 ##next you need to take these proportions and apply them to the total counts in each period
 #this is how you did it in the FWC "random" for random effects file
 
 
-# d4$Legalprop <-0.99
-# d4$Legalprop[d4$Period ==2] <-0.0002
-# d4$Legalprop[d4$Period ==3] <-0.0002
-# d4$Legalprop[d4$Period ==4] <-0.0002
-# d4$Legalprop[d4$Period ==5] <-0.03
-# d4$Legalprop[d4$Period ==6] <-0.0002
-# d4$Legalprop[d4$Period ==7] <-0.0007
-# d4$Legalprop[d4$Period ==8] <-0
-# d4$Legalprop[d4$Period ==9] <-0
 # 
-# #now multiply these proportions * the TotalOysters
+# #now multiply these proportions * the Quadrat_live
 # #round it so there are no fractions of oysters
 # #and convert to integer
-# d4$TotalSpat <-as.integer(round((d4$TotalOysters * d4$Spatprop),0))
-# d4$TotalSeed <-as.integer(round((d4$TotalOysters * d4$Seedprop),0))
-# d4$TotalLegal <-as.integer(round((d4$TotalOysters * d4$Legalprop),0))
+c3$TotalSpat <-as.integer(round((c3$Quadrat_live * c3$Spatprop),0))
+c3$TotalSeed <-as.integer(round((c3$Quadrat_live * c3$Seedprop),0))
+c3$TotalLegal <-as.integer(round((c3$Quadrat_live * c3$Legalprop),0))
+
 # 
-# 
+
+#subset the columns to the ones you want to work with
+c4 <- c3 %>% 
+  dplyr::select("Survey","Site","Station","StationName","Quadrat"
+                ,"TotalSpat","TotalSeed","TotalLegal","Weight_kg",
+                "Number_drills","Month","Day","Year","Period","Season")
+
+
+
 # write.table(d4, file = "~/Git/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
 
 
