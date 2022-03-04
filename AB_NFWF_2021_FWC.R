@@ -128,5 +128,28 @@ num_total_p13<-length(p13$SH)
 proportion_Legal_p13<-num_Legal_p13/num_total_p13
 #0.04 Legal
 
+##next you need to take these proportions and apply them to the total counts in each period
+#this is how you did it in the FWC "random" for random effects file
+
+
+# d4$Legalprop <-0.99
+# d4$Legalprop[d4$Period ==2] <-0.0002
+# d4$Legalprop[d4$Period ==3] <-0.0002
+# d4$Legalprop[d4$Period ==4] <-0.0002
+# d4$Legalprop[d4$Period ==5] <-0.03
+# d4$Legalprop[d4$Period ==6] <-0.0002
+# d4$Legalprop[d4$Period ==7] <-0.0007
+# d4$Legalprop[d4$Period ==8] <-0
+# d4$Legalprop[d4$Period ==9] <-0
+# 
+# #now multiply these proportions * the TotalOysters
+# #round it so there are no fractions of oysters
+# #and convert to integer
+# d4$TotalSpat <-as.integer(round((d4$TotalOysters * d4$Spatprop),0))
+# d4$TotalSeed <-as.integer(round((d4$TotalOysters * d4$Seedprop),0))
+# d4$TotalLegal <-as.integer(round((d4$TotalOysters * d4$Legalprop),0))
+# 
+# 
+# write.table(d4, file = "~/Git/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
 
 
