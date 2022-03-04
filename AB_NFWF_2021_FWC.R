@@ -130,22 +130,3 @@ proportion_Legal_p13<-num_Legal_p13/num_total_p13
 
 
 
-
-num_Legal_p13<-length(subset(p13$SH, p13$SH>=76))
-num_total_p13<-length(p13$SH)
-proportion_Legal_p13<-num_Legal_p13/num_total_p13
-#0 Legal
-
-
-
-
-num_Legal_p13<-length(subset(p13$SH, p13$SH>=76))
-num_total_p13<-length(p13$SH)
-proportion_Legal_p13<-num_Legal_p13/num_total_p13
-#0 Legal
-
-num_Legal_p14<-length(subset(p14$SH, p14$SH>=76))
-num_total_p14<-length(p14$SH)
-proportion_Legal_p14<-num_Legal_p14/num_total_p14
-#0 Legal
-
