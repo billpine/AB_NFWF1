@@ -95,7 +95,7 @@ hist(d2$SH)
 
 ###SEED
 
-num_seed_p11<-length(subset(s3$SH, s3$SH>=26 & s3$SH<76))
+num_seed_p11<-length(subset(p11$SH, p11$SH>=26 & p11$SH<76))
 num_total_p11<-length(p11$SH)
 proportion_seed_p11<-num_seed_p11/num_total_p11
 #0.19 seed
@@ -111,9 +111,39 @@ proportion_seed_p13<-num_seed_p13/num_total_p13
 #0.49 seed
 
 ####Legal######
-p13 <- subset(h3, h3$Period == 2)
-num_Legal_p2<-length(subset(p2$SH, p2$SH>=76))
-num_total_p2<-length(p2$SH)
-proportion_Legal_p2<-num_Legal_p2/num_total_p2
-#0.0002 Legal
+num_Legal_p11<-length(subset(p11$SH, p13$SH>=76))
+num_total_p11<-length(p11$SH)
+proportion_Legal_p11<-num_Legal_p11/num_total_p11
+#0 Legal
+
+num_Legal_p12<-length(subset(p12$SH, p12$SH>=76))
+num_total_p12<-length(p12$SH)
+proportion_Legal_p12<-num_Legal_p12/num_total_p12
+#0.07 Legal
+
+num_Legal_p13<-length(subset(p13$SH, p13$SH>=76))
+num_total_p13<-length(p13$SH)
+proportion_Legal_p13<-num_Legal_p13/num_total_p13
+#0.12 Legal
+
+
+
+
+num_Legal_p13<-length(subset(p13$SH, p13$SH>=76))
+num_total_p13<-length(p13$SH)
+proportion_Legal_p13<-num_Legal_p13/num_total_p13
+#0 Legal
+
+
+
+
+num_Legal_p13<-length(subset(p13$SH, p13$SH>=76))
+num_total_p13<-length(p13$SH)
+proportion_Legal_p13<-num_Legal_p13/num_total_p13
+#0 Legal
+
+num_Legal_p14<-length(subset(p14$SH, p14$SH>=76))
+num_total_p14<-length(p14$SH)
+proportion_Legal_p14<-num_Legal_p14/num_total_p14
+#0 Legal
 
