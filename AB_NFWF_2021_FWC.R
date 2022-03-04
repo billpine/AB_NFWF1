@@ -30,7 +30,8 @@ names(s2)[7] <- "SH"
 
 s2$SH[s2$SH == "Z"] <-NA
 
-
+#now make SH a number
+s2$SH <- as.numeric(s2$SH)
 
 
 ###
@@ -77,41 +78,42 @@ p11 <- subset(s3, s3$Period == 11)
 num_spat_p11<-length(p11$SH[p11$SH<26])
 num_total_p11<-length(p11$SH)
 proportion_spat_p11<-num_spat_p11/num_total_p11
-#0.76 spat
+#0.94 spat
 
 p12 <- subset(s3, s3$Period == 12)
 num_spat_p12<-length(p12$SH[p12$SH<26])
 num_total_p12<-length(p12$SH)
 proportion_spat_p12<-num_spat_p12/num_total_p12
-#0.52 spat
+#0.74 spat
 
 p13 <- subset(s3, s3$Period == 13)
 num_spat_p13<-length(p13$SH[p13$SH<26])
 num_total_p13<-length(p13$SH)
 proportion_spat_p13<-num_spat_p13/num_total_p13
-#0.39 spat
+#0.81 spat
 
-hist(d2$SH)
+hist(s3$SH)
 
 ###SEED
+#seed are done using dplyr, so different than seed or legal 
 
 num_seed_p11<-length(subset(p11$SH, p11$SH>=26 & p11$SH<76))
 num_total_p11<-length(p11$SH)
 proportion_seed_p11<-num_seed_p11/num_total_p11
-#0.19 seed
+#0.05 seed
 
 num_seed_p12<-length(subset(p12$SH, p12$SH>=26 & p12$SH<76))
 num_total_p12<-length(p12$SH)
 proportion_seed_p12<-num_seed_p12/num_total_p12
-#0.41 seed
+#0.24 seed
 
 num_seed_p13<-length(subset(p13$SH, p13$SH>=26 & p13$SH<76))
 num_total_p13<-length(p13$SH)
 proportion_seed_p13<-num_seed_p13/num_total_p13
-#0.49 seed
+#0.15 seed
 
 ####Legal######
-num_Legal_p11<-length(subset(p11$SH, p13$SH>=76))
+num_Legal_p11<-length(subset(p11$SH, p11$SH>=76))
 num_total_p11<-length(p11$SH)
 proportion_Legal_p11<-num_Legal_p11/num_total_p11
 #0 Legal
@@ -119,12 +121,12 @@ proportion_Legal_p11<-num_Legal_p11/num_total_p11
 num_Legal_p12<-length(subset(p12$SH, p12$SH>=76))
 num_total_p12<-length(p12$SH)
 proportion_Legal_p12<-num_Legal_p12/num_total_p12
-#0.07 Legal
+#0.02 Legal
 
 num_Legal_p13<-length(subset(p13$SH, p13$SH>=76))
 num_total_p13<-length(p13$SH)
 proportion_Legal_p13<-num_Legal_p13/num_total_p13
-#0.12 Legal
+#0.04 Legal
 
 
 
