@@ -224,6 +224,6 @@ c4 <- c3 %>%
 
 
 
-# write.table(d4, file = "~/Git/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
+write.table(c4, file = "~/Git/AB_DEP/FWC_2021_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
 
 
