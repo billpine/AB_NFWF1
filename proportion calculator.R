@@ -206,6 +206,47 @@ num_total_p9<-length(p9$SH)
 proportion_Legal_p9<-num_Legal_p9/num_total_p9
 #0.30 Legal
 
-hist(d2$SH)
+
+#####################
+
+height_dat <- h3 %>% 
+  filter(!is.na(SH))
+
+num_speck<-length(height_dat$SH[height_dat$SH<=10])
+num_total<-length(height_dat$SH)
+proportion_speck<-num_speck/num_total
+
+
+d1<-ggplot(height_dat, aes(x=SH))+
+  geom_density(color="darkblue", fill="lightblue")+
+  scale_x_continuous(breaks=seq(0,140,10))+
+  xlab("Shell height (mm)") +
+  ylab("PDF") +
+  facet_wrap(~Period)
+
+max(height_dat$SH)
+
+
+
+
+gg_dens_ridge_treat <- ggplot(data = h3, 
+                              aes(x = SH,
+                                  y = Period,
+                                  fill = Period)) +
+  geom_density_ridges(aes(point_color = Period,
+                          point_fill = Period),
+                      jittered_points = TRUE,
+                      alpha = 0.3,
+                      point_alpha = 0.5) +
+  stat_density_ridges(quantile_lines = TRUE,
+                      quantiles = c(0.025, 0.975),
+                      alpha = 0.3) +
+  scale_x_continuous(limits = c(0, 125)) +
+  facet_wrap(~ harvest) +
+  xlab("Oyster Heights (mm)") +
+  ylab("") +
+  theme_ridges() +
+  theme(legend.position = "none")
+
 
 
