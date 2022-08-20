@@ -211,9 +211,15 @@ for(i in unique(years)){
 }
 
 c2$Season <- "Winter"
-c2$Season[c2$Period == 1 | c2$Period == 3 | c2$Period == 5 | c2$Period == 7 | c2$Period == 9| c2$Period == 14| c2$Period == 13| c2$Period == 15] <- "Summer"
+c2$Season[c2$Period == 1 | c2$Period == 3 | c2$Period == 5 | c2$Period == 7 | c2$Period == 9| c2$Period == 11| c2$Period == 13| c2$Period == 15] <- "Summer"
 
 ####
+
+unique(c2$Period)
+
+table(c2$Period,c2$Month)
+table(c2$Period,c2$Season)
+
 
 
 names(s3)
