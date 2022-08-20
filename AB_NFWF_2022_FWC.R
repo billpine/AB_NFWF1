@@ -149,8 +149,9 @@ proportion_legal_p15<-num_Legal_p15/num_total_p15
 c1<-Counts
 
 names(c1)
+head(c1)
 
-names(c1)[4] <- "StationName"
+names(c1)[3] <- "StationName"
 names(c1)[9] <- "Quadrat_live"
 names(c1)[10] <- "Quadrat_dead"
 names(c1)[7] <- "Volume_L"
@@ -180,13 +181,13 @@ names(c2.1)
 
 
 
-unique(c2.1$StationName)
+unique(c2.1$Station)
 
 #This is written like this because I checked with Matt twice to make sure
 #I had the restoration stations only included (the stations that have cultch)
-c2.2<- subset(c2.1, c2.1$StationName == "Restoration")
-c2.3<- filter(c2.1, c2.1$StationName == "North")
-c2.4<- filter(c2.1, c2.1$StationName == "South")
+c2.2<- filter(c2.1, c2.1$Station == "Restoration")
+c2.3<- filter(c2.1, c2.1$Station == "North")
+c2.4<- filter(c2.1, c2.1$Station == "South")
 
 zzz<-rbind(c2.2,c2.3,c2.4)
 
@@ -214,13 +215,16 @@ c2$Season[c2$Period == 1 | c2$Period == 3 | c2$Period == 5 | c2$Period == 7 | c2
 
 ####
 
+
 names(s3)
 names(c2)
+
+head(c2)
 
 
 #subset the columns to the ones you want to work with
 c3 <- c2 %>% 
-  dplyr::select("Survey","Site","StationName","Quadrat"
+  dplyr::select("Survey","StationName","Quadrat"
                 ,"Quadrat_live","Quadrat_dead","Weight_kg",
                 "Number_drills","Month","Day","Year","Period","Season")
 
@@ -252,10 +256,11 @@ c3$TotalSeed <-as.integer(round((c3$Quadrat_live * c3$Seedprop),0))
 c3$TotalLegal <-as.integer(round((c3$Quadrat_live * c3$Legalprop),0))
 
 # 
+head(c3)
 
 #subset the columns to the ones you want to work with
 c4 <- c3 %>% 
-  dplyr::select("Survey","Site","StationName","Quadrat"
+  dplyr::select("Survey","StationName","Quadrat"
                 ,"TotalSpat","TotalSeed","TotalLegal","Weight_kg",
                 "Number_drills","Month","Day","Year","Period","Season")
 
