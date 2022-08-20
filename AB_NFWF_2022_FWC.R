@@ -84,7 +84,7 @@ for(i in unique(years)){
 }
 
 s3$Season <- "Winter"
-s3$Season[s3$Period == 1 | s3$Period == 3 | s3$Period == 5 | s3$Period == 7 | s3$Period == 9| s3$Period == 14| s3$Period == 13| s3$Period == 15] <- "Summer"
+s3$Season[s3$Period == 1 | s3$Period == 3 | s3$Period == 5 | s3$Period == 7 | s3$Period == 9| s3$Period == 11| s3$Period == 13| s3$Period == 15] <- "Summer"
 
 ####
 
