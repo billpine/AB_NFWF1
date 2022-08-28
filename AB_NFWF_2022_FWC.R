@@ -6,6 +6,12 @@
 #The stations that received cultch are: "Deep North"  "Deep South"  "Restoration."
 #-Matt
 
+#August 28, 2022 update. Need to correct this file again
+#because the stations that received cultch are not correct
+#Matt has provided a new data file and indicated Y/N whether 
+#a station was a restoration site. This may change results
+#as the number of stations is a lot fewer.
+
 
 library(readxl)
 library(tidyverse)
@@ -14,14 +20,19 @@ library(reshape)
 library(ggplot2)
 library(lubridate)
 
-SH <- read_excel("AB_ShellBudget_FSU.xlsx", sheet = "SHs", col_types = c("numeric", 
-"date", "text", "text", "numeric","text", "numeric"))
-
+SH <- read_excel("AB_ShellBudget_Pine.xlsx", 
+                 sheet = "SHs", col_types = c("numeric", 
+                                              "date", "text", "text", "numeric", 
+                                              "text", "numeric", "numeric", "text"))
 
 #SH <- read_excel("AB_ShellBudget_FSU.xlsx",sheet = "SHs", range = "A1370:J1669")
 
-Counts <-  read_excel("AB_ShellBudget_FSU.xlsx", sheet = "Counts")
-
+Counts <- read_excel("AB_ShellBudget_Pine.xlsx", 
+                     sheet = "Counts", col_types = c("numeric", 
+                                                     "date", "text", "text", "numeric", 
+                                                     "numeric", "numeric", "numeric", 
+                                                     "numeric", "numeric", "numeric", 
+                                                     "text"))
 #now start cleaning SH first
 
 names(SH)
@@ -33,6 +44,8 @@ names(s2)
 
 
 names(s2)[3] <- "Site"
+
+names(s2)[9] <- "Restored"
 
 
 s2$SH[s2$SH == ""] <-NA
@@ -49,17 +62,10 @@ s3 <- s2 %>%
         
 s3.1<- subset(s3, s3$Year == "2022" )
 
-unique(s3.1$Station)
+s3.2<- subset(s3.1, s3.1$Restored == "Yes")
 
-#This is written like this because I checked with Matt twice to make sure
-#I had the restoration stations only inlcuded (the stations that have cultch)
-s3.2<- subset(s3.1, s3.1$Station == "Restoration")
-s3.3<- filter(s3.1, s3.1$Station == "North")
-s3.4<- filter(s3.1, s3.1$Station == "South")
 
-zz<-rbind(s3.2,s3.3,s3.4)
-
-s3<-zz
+s3<-s3.2
 
 str(s3)
 
