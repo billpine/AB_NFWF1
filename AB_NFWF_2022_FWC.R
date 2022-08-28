@@ -25,8 +25,6 @@ SH <- read_excel("AB_ShellBudget_Pine.xlsx",
                                               "date", "text", "text", "numeric", 
                                               "text", "numeric", "numeric", "text"))
 
-#SH <- read_excel("AB_ShellBudget_FSU.xlsx",sheet = "SHs", range = "A1370:J1669")
-
 Counts <- read_excel("AB_ShellBudget_Pine.xlsx", 
                      sheet = "Counts", col_types = c("numeric", 
                                                      "date", "text", "text", "numeric", 
@@ -63,7 +61,6 @@ s3 <- s2 %>%
 s3.1<- subset(s3, s3$Year == "2022" )
 
 s3.2<- subset(s3.1, s3.1$Restored == "Yes")
-
 
 s3<-s3.2
 
@@ -123,7 +120,7 @@ p15 <- subset(s3, s3$Period == 15)
 num_spat_p15<-length(p15$SH[p15$SH<26])
 num_total_p15<-length(p15$SH)
 proportion_spat_p15<-num_spat_p15/num_total_p15
-#0.40 spat
+#0.38 spat
 
 ###SEED
 #seed are done using dplyr, so different than seed or legal 
@@ -131,23 +128,23 @@ proportion_spat_p15<-num_spat_p15/num_total_p15
 num_seed_p14<-length(subset(p14$SH, p14$SH>=26 & p14$SH<76))
 num_total_p14<-length(p14$SH)
 proportion_seed_p14<-num_seed_p14/num_total_p14
-#0.27 seed
+#0.28 seed
 
 num_seed_p15<-length(subset(p15$SH, p15$SH>=26 & p15$SH<76))
 num_total_p15<-length(p15$SH)
 proportion_seed_p15<-num_seed_p15/num_total_p15
-#0.60 seed
+#0.63 seed
 
 ####Legal######
 num_Legal_p14<-length(subset(p14$SH, p14$SH>=76))
 num_total_p14<-length(p14$SH)
 proportion_legal_p14<-num_Legal_p14/num_total_p14
-#0.003 Legal
+#0.0005 Legal
 
 num_Legal_p15<-length(subset(p15$SH, p15$SH>=76))
 num_total_p15<-length(p15$SH)
 proportion_legal_p15<-num_Legal_p15/num_total_p15
-#0.004 Legal
+#0.001 Legal
 
 
 ###now clean counts
@@ -157,21 +154,26 @@ c1<-Counts
 names(c1)
 head(c1)
 
+names(c1)[2] <- "Date"
 names(c1)[3] <- "StationName"
+names(c1)[5] <- "Quadrat"
 names(c1)[9] <- "Quadrat_live"
 names(c1)[10] <- "Quadrat_dead"
 names(c1)[7] <- "Volume_L"
 names(c1)[6] <- "Weight_kg"
 names(c1)[8] <- "Number_drills"
-
+names(c1)[12] <- "Restored"
 str(c1)
 
-unique(c1$Quadrat)
+c1.1<- subset(c1, c1$Restored == "Yes")
+c1<-c1.1
 
+str(c1$Date)
 
+names(c1)
 
 ###
-#add period
+#add year, month, day
 
 c2 <-c1 %>%
   mutate(Year = year(c2$Date),
@@ -185,19 +187,10 @@ str(c2)
 c2.1<- subset(c2, c2$Year == "2022" )
 names(c2.1)
 
+unique(c2.1$StationName)
 
+c2<-c2.1
 
-unique(c2.1$Station)
-
-#This is written like this because I checked with Matt twice to make sure
-#I had the restoration stations only included (the stations that have cultch)
-c2.2<- filter(c2.1, c2.1$Station == "Restoration")
-c2.3<- filter(c2.1, c2.1$Station == "North")
-c2.4<- filter(c2.1, c2.1$Station == "South")
-
-zzz<-rbind(c2.2,c2.3,c2.4)
-
-c2<-zzz
 #########
 
 c2$Period <- NA
@@ -226,13 +219,10 @@ unique(c2$Period)
 table(c2$Period,c2$Month)
 table(c2$Period,c2$Season)
 
-
-
 names(s3)
 names(c2)
 
 head(c2)
-
 
 #subset the columns to the ones you want to work with
 c3 <- c2 %>% 
