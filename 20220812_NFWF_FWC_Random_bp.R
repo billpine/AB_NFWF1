@@ -109,10 +109,11 @@ for(i in unique(years)){
 }
 
 d3$Season <- "Winter"
-d3$Season[d3$Period == 1 | d3$Period == 3 | d3$Period == 5 | d3$Period == 7 | d3$Period == 9| d3$Period == 11| d3$Period == 13] <- "Summer"
+d3$Season[d3$Period == 1 | d3$Period == 3 | d3$Period == 5 | d3$Period == 7 | d3$Period == 9| d3$Period == 11| d3$Period == 13| d3$Period == 15] <- "Summer"
 
 d3$Season
 
+table(d3$Season,d3$Period)
 
 period <- d3 %>%
   dplyr::group_by(Period,Year, Month, StationName) %>%
@@ -171,5 +172,5 @@ d4$TotalSeed <-as.integer(round((d4$TotalOysters * d4$Seedprop),0))
 d4$TotalLegal <-as.integer(round((d4$TotalOysters * d4$Legalprop),0))
 
 
-write.table(d4, file = "~/Git/AB_DEP/20220812_FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
+write.table(d4, file = "~/Git/AB_DEP/FWC_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
 
