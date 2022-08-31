@@ -2,6 +2,8 @@
 #one is the shell heights and the other are the counts
 #need to calculate the proportion of the different size categories and apply those proportions to the counts
 
+#This cleaning is to compile the "NFWF 2021 cultching project data
+#cultch went in the water July 16 – July 19, 2021. 
 
 library(readxl)
 library(tidyverse)
@@ -49,8 +51,9 @@ s3 <- s2 %>%
          Month = month(s2$Date),
          Day = day(s2$Date))
 
-s3.1<- subset(s3, s3$Year > 1900)
+s3.1<- subset(s3, s3$Year > 2020)
 
+#this is what grabs the restored sites only
 s3.2<- subset(s3.1, s3.1$Restored == "Yes")
 
 s3<-s3.2
@@ -101,11 +104,17 @@ proportion_spat<-num_spat/num_total
 
 ########
 ####SPAT######
+p13<- subset(s3, s3$Period == 13)
+num_spat_p13<-length(p13$SH[p13$SH<26])
+num_total_p13<-length(p13$SH)
+proportion_spat_p13<-num_spat_p13/num_total_p13
+#0.99 spat
+
 p14<- subset(s3, s3$Period == 14)
 num_spat_p14<-length(p14$SH[p14$SH<26])
 num_total_p14<-length(p14$SH)
 proportion_spat_p14<-num_spat_p14/num_total_p14
-#0.72 spat
+#0.82 spat
 
 p15 <- subset(s3, s3$Period == 15)
 num_spat_p15<-length(p15$SH[p15$SH<26])
@@ -116,21 +125,32 @@ proportion_spat_p15<-num_spat_p15/num_total_p15
 ###SEED
 #seed are done using dplyr, so different than seed or legal 
 
+num_seed_p13<-length(subset(p13$SH, p13$SH>=26 & p13$SH<76))
+num_total_p13<-length(p13$SH)
+proportion_seed_p13<-num_seed_p13/num_total_p13
+#0.008 seed
+
 num_seed_p14<-length(subset(p14$SH, p14$SH>=26 & p14$SH<76))
 num_total_p14<-length(p14$SH)
 proportion_seed_p14<-num_seed_p14/num_total_p14
-#0.28 seed
+#0.18 seed
 
 num_seed_p15<-length(subset(p15$SH, p15$SH>=26 & p15$SH<76))
 num_total_p15<-length(p15$SH)
 proportion_seed_p15<-num_seed_p15/num_total_p15
-#0.63 seed
+#0.62 seed
 
 ####Legal######
+
+num_Legal_p13<-length(subset(p13$SH, p13$SH>=76))
+num_total_p13<-length(p13$SH)
+proportion_legal_p13<-num_Legal_p13/num_total_p13
+#0.0004 Legal
+
 num_Legal_p14<-length(subset(p14$SH, p14$SH>=76))
 num_total_p14<-length(p14$SH)
 proportion_legal_p14<-num_Legal_p14/num_total_p14
-#0.0005 Legal
+#0.0003 Legal
 
 num_Legal_p15<-length(subset(p15$SH, p15$SH>=76))
 num_total_p15<-length(p15$SH)
@@ -173,9 +193,12 @@ c2 <-c1 %>%
 
 str(c2)
 
+unique(c2$Year)
+
+
 #####
 ##
-c2.1<- subset(c2, c2$Year == "2022" )
+c2.1<- subset(c2, c2$Year > 2020 )
 names(c2.1)
 
 unique(c2.1$StationName)
@@ -225,14 +248,17 @@ unique(c3$Period)
 
 
 c3$Spatprop <-0.99
+c3$Spatprop[c3$Period ==13] <-proportion_spat_p13
 c3$Spatprop[c3$Period ==14] <-proportion_spat_p14
 c3$Spatprop[c3$Period ==15] <-proportion_spat_p15
 
 c3$Seedprop <-0.99
+c3$Seedprop[c3$Period ==13] <-proportion_seed_p13
 c3$Seedprop[c3$Period ==14] <-proportion_seed_p14
 c3$Seedprop[c3$Period ==15] <-proportion_seed_p15
 
 c3$Legalprop <-0.99
+c3$Legalprop[c3$Period ==13] <-proportion_legal_p13
 c3$Legalprop[c3$Period ==14] <-proportion_legal_p14
 c3$Legalprop[c3$Period ==15] <-proportion_legal_p15
 
@@ -259,4 +285,4 @@ c4 <- c3 %>%
 
 
 
-write.table(c4, file = "~/Git/AB_DEP/FWC_2021_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
+write.table(c4, file = "~/Git/AB_DEP/NFWF_2021_Project_to_merge.csv", row.names = FALSE,col.names = TRUE,sep = ",")
